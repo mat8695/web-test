@@ -1,0 +1,227 @@
+.testimonials {
+  width: 100%;
+  padding: 80px;
+  background-color: #1e1e1e;
+  box-sizing: border-box;
+}
+
+.card {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 716px;
+  padding: 48px;
+  background-color: #ffcde0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.column {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 0;
+}
+
+.columnLeft {
+  align-items: flex-start;
+}
+
+.columnRight {
+  align-items: flex-end;
+}
+
+.introPadding {
+  padding: 16px 24px 16px 16px;
+}
+
+.signaturePadding {
+  padding: 16px 16px 16px 24px;
+}
+
+.title {
+  width: 100%;
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 60px;
+  font-weight: 500;
+  line-height: normal;
+  color: #e42322;
+  word-break: break-word;
+}
+
+.quote {
+  width: 100%;
+  margin: 0;
+}
+
+.quote p {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: normal;
+  color: #e42322;
+  word-break: break-word;
+}
+
+.divider {
+  flex-shrink: 0;
+  align-self: stretch;
+  width: 2px;
+  background-color: #e42322;
+}
+
+.arrowButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 62px;
+  height: 62px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: #e42322;
+  cursor: pointer;
+}
+
+.arrowButton svg {
+  width: 100%;
+  height: 100%;
+}
+
+.arrowIconLeft {
+  transform: rotate(180deg);
+}
+
+.author {
+  width: 475px;
+  max-width: 100%;
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 22px;
+  font-weight: 500;
+  line-height: normal;
+  text-align: right;
+  color: #493939;
+}
+
+.mobileCard {
+  display: none;
+  flex-direction: column;
+  width: 100%;
+  gap: 10px;
+}
+
+.mobileTop {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 64px;
+  width: 100%;
+  padding-bottom: 32px;
+}
+
+.mobileTitleRow {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 32px;
+  width: 100%;
+}
+
+.mobileTitle {
+  width: 100%;
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 38px;
+  font-weight: 500;
+  line-height: normal;
+  color: #e42322;
+  word-break: break-word;
+}
+
+.mobileQuote {
+  width: 100%;
+  margin: 0;
+}
+
+.mobileQuote p {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: normal;
+  color: #e42322;
+  word-break: break-word;
+}
+
+.mobileDivider {
+  width: 100%;
+  height: 2px;
+  background-color: #e42322;
+}
+
+.mobileBottom {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 32px;
+  width: 100%;
+  padding-top: 16px;
+}
+
+.mobileAuthor {
+  width: 100%;
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 22px;
+  font-weight: 500;
+  line-height: normal;
+  text-align: right;
+  color: #e42322;
+}
+
+.mobileArrowButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 49px;
+  height: 49px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: #e42322;
+  cursor: pointer;
+}
+
+.mobileArrowButton svg {
+  width: 100%;
+  height: 100%;
+}
+
+@media (max-width: 810px) {
+  .testimonials {
+    padding: 16px;
+  }
+
+  .card {
+    flex-direction: column;
+    min-height: 0;
+    padding: 16px;
+  }
+
+  .column,
+  .divider {
+    display: none;
+  }
+
+  .mobileCard {
+    display: flex;
+  }
+}

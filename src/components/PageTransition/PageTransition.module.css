@@ -1,0 +1,19 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  padding: 80px;
+  background-color: #ffcde0;
+  box-sizing: border-box;
+  transform: translateY(0);
+  transition: transform var(--pt-exit-duration, 800ms) cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.exiting {
+  transform: translateY(100%);
+}
