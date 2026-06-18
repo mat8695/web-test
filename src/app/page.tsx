@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import PageTransition from "@/components/PageTransition/PageTransition";
+import Hero from "@/components/Hero/Hero";
 import Testimonials from "@/components/Testimonials/Testimonials";
 
 export default function Home() {
@@ -13,11 +14,12 @@ export default function Home() {
         <PageTransition
           variant="counter"
           label="Loading"
-          duration={2000}
-          exitDuration={800}
+          duration={1000}
+          exitDuration={400}
           onComplete={() => setShowTransition(false)}
         />
       )}
+      <Hero />
       <Testimonials />
     </div>
   );
