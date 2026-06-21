@@ -8,8 +8,8 @@ export function HeartIcon({ className }: HeartIconProps) {
       className={className}
       viewBox="0 0 20 18"
       fill="none"
-      width={20}
-      height={18}
+      width={30}
+      height={27}
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
     >

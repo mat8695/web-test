@@ -1,0 +1,61 @@
+.page {
+  min-height: 100vh;
+  background-color: #1e1e1e;
+  color: #f7a9c5;
+  padding: 80px;
+  box-sizing: border-box;
+}
+
+.header {
+  margin-bottom: 48px;
+}
+
+.title {
+  margin: 0 0 12px;
+  font-family: 'Reckless Standard M-TRIAL', Georgia, serif;
+  font-size: 64px;
+  font-weight: 400;
+  line-height: 1;
+  color: #f7a9c5;
+}
+
+.meta {
+  margin: 0 0 16px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #ffcce0;
+  opacity: 0.6;
+}
+
+.services {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.services li {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #ffcce0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 1px solid #f7a9c5;
+  padding: 4px 10px;
+}
+
+.coverWrapper {
+  width: 100%;
+  max-width: 900px;
+}
+
+.cover {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
