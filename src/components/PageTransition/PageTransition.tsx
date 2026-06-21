@@ -3,9 +3,10 @@
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import styles from "./PageTransition.module.css";
 import { CounterContent } from "./variants/CounterContent";
+import { HeartLoader } from "./variants/HeartLoader";
 import type { PageTransitionProps } from "./types";
 
-const DEFAULT_DURATION_MS = 2000;
+const DEFAULT_DURATION_MS = 1000;
 const DEFAULT_EXIT_DURATION_MS = 800;
 
 export default function PageTransition({
@@ -52,6 +53,8 @@ export default function PageTransition({
     switch (variant) {
       case "counter":
         return <CounterContent label={label} progress={progress} showPercentage={showPercentage} />;
+      case "heartLoader":
+        return <HeartLoader label={label} progress={progress} showPercentage={showPercentage} />;
       // Future variants plug in here, each backed by its own component
       // under `variants/`. Returning null keeps the switch exhaustive so
       // TypeScript flags this file when a new variant is added.

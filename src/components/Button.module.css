@@ -1,0 +1,53 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 4px 8px;
+  border: 1px solid #f7a9c5;
+  background: transparent;
+  overflow: hidden;
+  cursor: pointer;
+  text-decoration: none;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: normal;
+  white-space: nowrap;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.fill {
+  position: absolute;
+  inset: 0;
+  background-color: #ffcde0;
+  transform: scaleX(0);
+  transform-origin: left center;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.textDefault {
+  position: relative;
+  z-index: 1;
+  color: #f7a9c5;
+  pointer-events: none;
+}
+
+.textHover {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  color: #1e1e1e;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: normal;
+  white-space: nowrap;
+  clip-path: inset(0 100% 0 0);
+  pointer-events: none;
+}

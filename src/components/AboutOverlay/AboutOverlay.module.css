@@ -1,0 +1,68 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  width: 100%;
+  height: 100vh;
+  background-color: #f7a9c5;
+  padding: 40px 80px 64px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow-y: auto;
+  /* GSAP sets the initial transform on mount */
+}
+
+/* Heart logo — top left */
+.logo {
+  position: absolute;
+  top: 39px;
+  left: 80px;
+}
+
+/* Portrait photo — top right */
+.photo {
+  position: absolute;
+  top: 54px;
+  right: 80px;
+  width: 384px;
+  height: 446px;
+  object-fit: cover;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Bio text — bottom left, leaves room for the photo */
+.text {
+  max-width: 760px;
+}
+
+.text p {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.35;
+  color: #1e1e1e;
+}
+
+.text p + p {
+  margin-top: 1em;
+}
+
+/* Close arrow — bottom right */
+.closeButton {
+  position: absolute;
+  bottom: 40px;
+  right: 46px;
+  width: 62px;
+  height: 62px;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
