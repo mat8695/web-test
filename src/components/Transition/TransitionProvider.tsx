@@ -9,11 +9,9 @@ import {
   useRef,
   type ReactNode,
 } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import gsap from "gsap";
 
-// useLayoutEffect causes a warning on the server.
-// This resolves to useEffect during SSR and useLayoutEffect in the browser.
 const useIsomorphicLayoutEffect =
   typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
@@ -32,33 +30,49 @@ export function usePageTransition() {
 export function TransitionProvider({ children }: { children: ReactNode }) {
   const panelRef = useRef<HTMLDivElement>(null);
   const isAnimating = useRef(false);
+  const isFirstRender = useRef(true);
   const router = useRouter();
+  const pathname = usePathname();
 
-  // Initial page load / hard refresh
   useIsomorphicLayoutEffect(() => {
     const panel = panelRef.current;
     if (!panel) return;
 
-    if (sessionStorage.getItem("introPlayed")) {
-      // Repeat visit or refresh: panel starts covering, reveal upward
-      isAnimating.current = true;
-      gsap.to(panel, {
-        y: "-100%",
-        duration: 0.50,
-        ease: "power2.inOut",
-        onComplete() {
-          gsap.set(panel, { y: "100%" });
-          isAnimating.current = false;
-        },
-      });
-    } else {
-      // First ever visit: hide the panel instantly so the intro loader
-      // (same colour, #ffcde0) can take over without a visible seam
-      gsap.set(panel, { y: "100%" });
-    }
-  }, []);
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
 
-  // Internal navigation
+      // Initial page load / hard refresh
+      if (sessionStorage.getItem("introPlayed")) {
+        isAnimating.current = true;
+        gsap.to(panel, {
+          y: "-100%",
+          duration: 0.50,
+          ease: "power2.inOut",
+          onComplete() {
+            gsap.set(panel, { y: "100%" });
+            isAnimating.current = false;
+          },
+        });
+      } else {
+        // First ever visit: hide instantly, let the intro loader take over
+        gsap.set(panel, { y: "100%" });
+      }
+      return;
+    }
+
+    // Pathname changed after a navigate() call — panel is at y:0% covering the
+    // new page. Reveal it upward and reset so the next navigation can cover again.
+    gsap.to(panel, {
+      y: "-100%",
+      duration: 0.50,
+      ease: "power2.inOut",
+      onComplete() {
+        gsap.set(panel, { y: "100%" });
+        isAnimating.current = false;
+      },
+    });
+  }, [pathname]);
+
   const navigate = useCallback(
     (href: string) => {
       if (isAnimating.current) return;
@@ -71,37 +85,23 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
 
       isAnimating.current = true;
 
-      const tl = gsap.timeline({
-        onComplete() {
-          isAnimating.current = false;
-        },
-      });
+      const tl = gsap.timeline();
 
-      // Reset position (safe if a previous animation was interrupted)
+      // Ensure panel starts below the viewport
       tl.set(panel, { y: "100%" });
 
-      // Cover: slide up from bottom to fill viewport (250ms)
+      // Cover: slide up until the panel fully hides the current page
       tl.to(panel, { y: "0%", duration: 0.25, ease: "power2.inOut" });
 
-      // Route change fires only once the screen is fully covered
+      // Navigate once fully covered. isAnimating stays true until the
+      // reveal onComplete resets it after the new page is shown.
       tl.call(() => { router.push(href); });
-
-      // Reveal: continue upward and exit through the top (250ms)
-      tl.to(panel, { y: "-100%", duration: 0.25, ease: "power2.inOut" });
-
-      // Reset for next navigation
-      tl.set(panel, { y: "100%" });
     },
     [router],
   );
 
   return (
     <TransitionContext.Provider value={{ navigate }}>
-      {/*
-        Panel starts at translateY(0) so the page is covered from the very
-        first painted frame. useIsomorphicLayoutEffect then either reveals
-        (repeat visit) or hides it (first visit) before the user interacts.
-      */}
       <div
         ref={panelRef}
         style={{

@@ -1,5 +1,6 @@
 import { client } from "@/sanity/lib/client";
 import type { SanityProject } from "@/components/Works/types";
+import type { SanityServiceItem } from "@/components/Services/types";
 
 const PROJECTS_QUERY = `
   *[_type == "project"] | order(_createdAt asc) {
@@ -42,5 +43,26 @@ export async function getProjectBySlug(slug: string): Promise<SanityProject | nu
     return project ?? null;
   } catch {
     return null;
+  }
+}
+
+const SERVICE_ITEMS_QUERY = `
+  *[_type == "serviceItem"] | order(order asc) {
+    _id,
+    title,
+    description,
+    image,
+    order
+  }
+`;
+
+export async function getServiceItems(): Promise<SanityServiceItem[]> {
+  try {
+    const items = await client.fetch<SanityServiceItem[]>(SERVICE_ITEMS_QUERY, {}, {
+      next: { revalidate: 60 },
+    });
+    return items ?? [];
+  } catch {
+    return [];
   }
 }
