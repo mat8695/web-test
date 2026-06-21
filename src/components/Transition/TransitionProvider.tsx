@@ -30,38 +30,24 @@ export function usePageTransition() {
 export function TransitionProvider({ children }: { children: ReactNode }) {
   const panelRef = useRef<HTMLDivElement>(null);
   const isAnimating = useRef(false);
-  const isFirstRender = useRef(true);
   const router = useRouter();
   const pathname = usePathname();
 
+  // Runs on initial mount and on every pathname change.
+  // Both cases: panel is at y:0% covering the page — reveal upward.
+  // On first visit the heart loader (same #ffcde0 colour) covers the page
+  // underneath while the panel slides away, so there is no visible seam.
   useIsomorphicLayoutEffect(() => {
     const panel = panelRef.current;
     if (!panel) return;
 
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-
-      // Initial page load / hard refresh
-      if (sessionStorage.getItem("introPlayed")) {
-        isAnimating.current = true;
-        gsap.to(panel, {
-          y: "-100%",
-          duration: 0.50,
-          ease: "power2.inOut",
-          onComplete() {
-            gsap.set(panel, { y: "100%" });
-            isAnimating.current = false;
-          },
-        });
-      } else {
-        // First ever visit: hide instantly, let the intro loader take over
-        gsap.set(panel, { y: "100%" });
-      }
+    // Sanity Studio has its own UI — skip the transition overlay entirely.
+    if (pathname.startsWith("/studio")) {
+      gsap.set(panel, { y: "100%" });
       return;
     }
 
-    // Pathname changed after a navigate() call — panel is at y:0% covering the
-    // new page. Reveal it upward and reset so the next navigation can cover again.
+    isAnimating.current = true;
     gsap.to(panel, {
       y: "-100%",
       duration: 0.50,

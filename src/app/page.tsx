@@ -8,8 +8,8 @@ export default function Home() {
     <div>
       <HomeClient />
       <Works />
-      <Testimonials />
       <Services />
+      <Testimonials />
     </div>
   );
 }

@@ -91,7 +91,21 @@ export default function ServicesClient({ items }: ServicesClientProps) {
 
         {/* Image stack — right on desktop, top on mobile */}
         <div className={styles.imageArea} aria-hidden="true">
-          <div className={styles.defaultSlide} style={{ backgroundColor: "#2a2a2a" }} />
+          {(() => {
+            const defaultImageUrl = items[0]?.image
+              ? urlFor(items[0].image).width(1270).url()
+              : null;
+            return (
+              <div
+                className={styles.defaultSlide}
+                style={defaultImageUrl ? undefined : { backgroundColor: "#2a2a2a" }}
+              >
+                {defaultImageUrl && (
+                  <img src={defaultImageUrl} alt="" className={styles.image} />
+                )}
+              </div>
+            );
+          })()}
           {items.map((item, i) => {
             const imageUrl = item.image
               ? urlFor(item.image).width(1270).url()
