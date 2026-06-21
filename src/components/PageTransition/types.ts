@@ -1,5 +1,6 @@
 export type PageTransitionVariant =
   | "counter"
+  | "heartLoader"
   | "logo"
   | "wordmark"
   | "curtain"

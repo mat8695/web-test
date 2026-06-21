@@ -1,5 +1,11 @@
+"use client";
+
 import Button from "@/components/Button";
 import styles from "./Hero.module.css";
+
+interface HeroProps {
+  onOpenAbout?: () => void;
+}
 
 function HeartIcon() {
   return (
@@ -18,7 +24,7 @@ function HeartIcon() {
   );
 }
 
-export default function Hero() {
+export default function Hero({ onOpenAbout }: HeroProps) {
   return (
     <section className={styles.hero}>
       <div className={styles.topBar} aria-label="KAT is a designer">
@@ -38,7 +44,7 @@ export default function Hero() {
         </div>
         <HeartIcon />
         <div className={styles.bottomBarRight}>
-          <Button href="/about">read about KAT</Button>
+          <Button onClick={onOpenAbout}>read about</Button>
         </div>
       </div>
     </section>
