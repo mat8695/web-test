@@ -52,19 +52,27 @@ function CloseArrow() {
 export default function AboutOverlay({ isOpen, onClose }: AboutOverlayProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
 
-  // Initialise off-screen without animation
-  useEffect(() => {
-    gsap.set(overlayRef.current, { y: "100%" });
-  }, []);
-
-  // Slide up on open, slide back down on close
   useEffect(() => {
     const overlay = overlayRef.current;
     if (!overlay) return;
 
-    const tween = isOpen
-      ? gsap.to(overlay, { y: 0, duration: 0.7, ease: "power2.inOut" })
-      : gsap.to(overlay, { y: "100%", duration: 0.6, ease: "power2.inOut" });
+    let tween: gsap.core.Tween;
+
+    if (isOpen) {
+      // Make visible before the slide-up begins
+      gsap.set(overlay, { opacity: 1, visibility: "visible", pointerEvents: "auto" });
+      tween = gsap.to(overlay, { y: 0, duration: 0.7, ease: "power2.inOut" });
+    } else {
+      tween = gsap.to(overlay, {
+        y: "100%",
+        duration: 0.6,
+        ease: "power2.inOut",
+        onComplete() {
+          // Restore CSS-hidden state after slide-down finishes
+          gsap.set(overlay, { opacity: 0, visibility: "hidden", pointerEvents: "none" });
+        },
+      });
+    }
 
     return () => {
       tween.kill();

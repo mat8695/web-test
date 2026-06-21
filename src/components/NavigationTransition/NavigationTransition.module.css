@@ -1,0 +1,20 @@
+/* Shared base for both phases */
+.covered,
+.revealing {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background-color: #1e1e1e;
+  pointer-events: none;
+}
+
+/* Phase 1: instantly opaque — no transition so the first paint is solid */
+.covered {
+  opacity: 1;
+}
+
+/* Phase 2: fade out to reveal the new page */
+.revealing {
+  opacity: 0;
+  transition: opacity 400ms ease;
+}

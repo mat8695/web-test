@@ -6,7 +6,7 @@ import { CounterContent } from "./variants/CounterContent";
 import { HeartLoader } from "./variants/HeartLoader";
 import type { PageTransitionProps } from "./types";
 
-const DEFAULT_DURATION_MS = 1000;
+const DEFAULT_DURATION_MS = 1500;
 const DEFAULT_EXIT_DURATION_MS = 800;
 
 export default function PageTransition({

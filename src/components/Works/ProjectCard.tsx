@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { urlFor } from "@/sanity/lib/image";
+import { TransitionLink } from "@/components/Transition/TransitionLink";
 import type { SanityProject } from "./types";
 import styles from "./ProjectCard.module.css";
 
@@ -13,7 +13,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
     : null;
 
   return (
-    <Link href={`/projects/${project.slug}`} className={styles.card}>
+    <TransitionLink href={`/works/${project.slug}`} className={styles.card}>
       <div className={styles.imageWrapper}>
         {imageUrl ? (
           <img src={imageUrl} alt={project.title} className={styles.image} />
@@ -22,6 +22,6 @@ export function ProjectCard({ project }: ProjectCardProps) {
         )}
       </div>
       <p className={styles.title}>{project.title}</p>
-    </Link>
+    </TransitionLink>
   );
 }
