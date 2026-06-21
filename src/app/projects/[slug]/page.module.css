@@ -1,0 +1,42 @@
+.page {
+  min-height: 100vh;
+  background-color: #1e1e1e;
+  color: #f7a9c5;
+  padding: 80px;
+  box-sizing: border-box;
+}
+
+.header {
+  margin-bottom: 48px;
+}
+
+.title {
+  margin: 0 0 16px;
+  font-family: 'Reckless Standard M-TRIAL', Georgia, serif;
+  font-size: 64px;
+  font-weight: 400;
+  line-height: 1;
+  color: #f7a9c5;
+}
+
+.description {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: #ffcce0;
+  max-width: 640px;
+}
+
+.coverWrapper {
+  width: 100%;
+  max-width: 800px;
+}
+
+.cover {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
