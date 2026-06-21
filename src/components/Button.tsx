@@ -4,12 +4,13 @@ import { useEffect, useRef, type ReactNode } from "react";
 import gsap from "gsap";
 import styles from "./Button.module.css";
 
-export type ButtonVariant = "default";
+export type ButtonVariant = "default" | "sectionTitle";
 
 export interface ButtonProps {
   children: ReactNode;
   href?: string;
   onClick?: () => void;
+  onMouseEnter?: () => void;
   className?: string;
   variant?: ButtonVariant;
 }
@@ -18,6 +19,7 @@ export default function Button({
   children,
   href,
   onClick,
+  onMouseEnter: onMouseEnterProp,
   className,
   variant = "default",
 }: ButtonProps) {
@@ -46,7 +48,10 @@ export default function Button({
     };
   }, []);
 
-  const handleMouseEnter = () => tlRef.current?.play();
+  const handleMouseEnter = () => {
+    tlRef.current?.play();
+    onMouseEnterProp?.();
+  };
   const handleMouseLeave = () => tlRef.current?.reverse();
 
   const cls = [styles.button, className].filter(Boolean).join(" ");
