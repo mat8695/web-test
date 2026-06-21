@@ -51,3 +51,27 @@
   clip-path: inset(0 100% 0 0);
   pointer-events: none;
 }
+
+/* ── sectionTitle variant ──────────────────────────────────────── */
+
+.button[data-variant="sectionTitle"] {
+  font-size: 40px;
+  border: none;
+  padding: 0;
+  white-space: normal;
+  word-break: break-word;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.button[data-variant="sectionTitle"] .textDefault {
+  text-align: left;
+}
+
+.button[data-variant="sectionTitle"] .textHover {
+  display: block;
+  font-size: 40px;
+  white-space: normal;
+  word-break: break-word;
+  text-align: left;
+}
