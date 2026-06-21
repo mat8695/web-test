@@ -3,6 +3,7 @@
 import { useState } from "react";
 import PageTransition from "@/components/PageTransition/PageTransition";
 import Hero from "@/components/Hero/Hero";
+import Works from "@/components/Works/Works";
 import Testimonials from "@/components/Testimonials/Testimonials";
 import AboutOverlay from "@/components/AboutOverlay/AboutOverlay";
 
@@ -21,6 +22,7 @@ export default function Home() {
         />
       )}
       <Hero onOpenAbout={() => setShowAbout(true)} />
+      <Works />
       <Testimonials />
       <AboutOverlay isOpen={showAbout} onClose={() => setShowAbout(false)} />
     </div>

@@ -1,0 +1,67 @@
+.section {
+  position: relative;
+  width: 100%;
+  background-color: #1e1e1e;
+}
+
+/* ── Desktop: 3-column staggered ────────────────────────────── */
+
+.desktopGrid {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: 120px;
+  padding: 80px;
+  box-sizing: border-box;
+  justify-content: center;
+  align-items: flex-start;
+  /* Card dimensions cascade to every ProjectCard inside this layout */
+  --card-w: min(430px, calc((100vw - 400px) / 3));
+  --card-h: calc(var(--card-w) * 529 / 430);
+}
+
+.colLeft,
+.colCenter,
+.colRight {
+  display: flex;
+  flex-direction: column;
+  gap: 117px;
+  flex-shrink: 0;
+}
+
+/* Push center column down by one card slot to create the stagger */
+.colCenter {
+  padding-top: calc((var(--card-h) + 117px) / 2);
+}
+
+.responsiveGrid {
+  display: none;
+}
+
+/* ── Tablet: 2-column fluid grid ─────────────────────────────── */
+
+@media (max-width: 1200px) {
+  .desktopGrid {
+    display: none;
+  }
+
+  .responsiveGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 48px;
+    padding: 80px;
+    box-sizing: border-box;
+    position: relative;
+    z-index: 1;
+  }
+}
+
+/* ── Mobile: single-column ───────────────────────────────────── */
+
+@media (max-width: 767px) {
+  .responsiveGrid {
+    grid-template-columns: 1fr;
+    padding: 24px;
+    gap: 32px;
+  }
+}
