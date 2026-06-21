@@ -1,13 +1,15 @@
-import { PROJECTS } from "@/lib/projects";
+import { getProjects } from "@/lib/sanity";
 import { BackgroundGrid } from "./BackgroundGrid";
 import { ProjectCard } from "./ProjectCard";
 import styles from "./Works.module.css";
 
-const leftProjects = PROJECTS.filter((_, i) => i % 3 === 0);
-const centerProjects = PROJECTS.filter((_, i) => i % 3 === 1);
-const rightProjects = PROJECTS.filter((_, i) => i % 3 === 2);
+export default async function Works() {
+  const projects = await getProjects();
 
-export default function Works() {
+  const leftProjects = projects.filter((_, i) => i % 3 === 0);
+  const centerProjects = projects.filter((_, i) => i % 3 === 1);
+  const rightProjects = projects.filter((_, i) => i % 3 === 2);
+
   return (
     <section className={styles.section} aria-label="Selected works">
       <BackgroundGrid />
@@ -33,7 +35,7 @@ export default function Works() {
 
       {/* Tablet / mobile: flat list in original project order */}
       <div className={styles.responsiveGrid}>
-        {PROJECTS.map((project) => (
+        {projects.map((project) => (
           <ProjectCard key={project.slug} project={project} />
         ))}
       </div>
