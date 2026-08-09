@@ -7,7 +7,7 @@
 
 .label {
   margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Booton', Arial, Helvetica, sans-serif;
   font-size: 24px;
   font-weight: 500;
   line-height: normal;
@@ -17,7 +17,7 @@
 
 .percentage {
   margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Booton', Arial, Helvetica, sans-serif;
   font-size: 16px;
   font-weight: 500;
   line-height: normal;

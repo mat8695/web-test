@@ -7,6 +7,7 @@ export interface SanityProject {
   title: string;
   slug: string;
   coverImage?: SanityImageRef;
+  hoverDescription?: string;
   year?: string;
   services?: string[];
 }

@@ -18,17 +18,23 @@ export default async function Works() {
       <div className={styles.desktopGrid}>
         <div className={styles.colLeft}>
           {leftProjects.map((project) => (
-            <ProjectCard key={project.slug} project={project} />
+            <div key={project.slug} data-works-card>
+              <ProjectCard project={project} />
+            </div>
           ))}
         </div>
         <div className={styles.colCenter}>
           {centerProjects.map((project) => (
-            <ProjectCard key={project.slug} project={project} />
+            <div key={project.slug} data-works-card>
+              <ProjectCard project={project} />
+            </div>
           ))}
         </div>
         <div className={styles.colRight}>
           {rightProjects.map((project) => (
-            <ProjectCard key={project.slug} project={project} />
+            <div key={project.slug} data-works-card>
+              <ProjectCard project={project} />
+            </div>
           ))}
         </div>
       </div>

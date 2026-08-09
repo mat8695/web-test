@@ -34,7 +34,7 @@
 
 .subtitle {
   margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Booton', Arial, Helvetica, sans-serif;
   font-size: 24px;
   font-weight: 500;
   color: #ffcde0;
@@ -146,7 +146,7 @@
   }
 
   .mobileServiceItem {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Booton', Arial, Helvetica, sans-serif;
     font-size: 14px;
     font-weight: 500;
     color: #ffcce0;

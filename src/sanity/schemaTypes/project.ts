@@ -22,6 +22,13 @@ export const projectType = defineType({
       type: "image",
     }),
     defineField({
+      name: "hoverDescription",
+      title: "Hover Description",
+      description: "Short text shown in the dark panel when a visitor hovers the project card.",
+      type: "text",
+      rows: 2,
+    }),
+    defineField({
       name: "year",
       title: "Year",
       type: "string",

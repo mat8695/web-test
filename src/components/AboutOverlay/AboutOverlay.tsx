@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
+import { SHARP_EASE } from "@/lib/easing";
 import styles from "./AboutOverlay.module.css";
 
 interface AboutOverlayProps {
@@ -61,12 +62,12 @@ export default function AboutOverlay({ isOpen, onClose }: AboutOverlayProps) {
     if (isOpen) {
       // Make visible before the slide-up begins
       gsap.set(overlay, { opacity: 1, visibility: "visible", pointerEvents: "auto" });
-      tween = gsap.to(overlay, { y: 0, duration: 0.7, ease: "power2.inOut" });
+      tween = gsap.to(overlay, { y: 0, duration: 0.7, ease: SHARP_EASE });
     } else {
       tween = gsap.to(overlay, {
         y: "100%",
         duration: 0.6,
-        ease: "power2.inOut",
+        ease: SHARP_EASE,
         onComplete() {
           // Restore CSS-hidden state after slide-down finishes
           gsap.set(overlay, { opacity: 0, visibility: "hidden", pointerEvents: "none" });

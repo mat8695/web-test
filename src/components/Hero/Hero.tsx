@@ -27,22 +27,19 @@ function HeartIcon() {
 export default function Hero({ onOpenAbout }: HeroProps) {
   return (
     <section className={styles.hero}>
-      <div className={styles.topBar} aria-label="KAT is a designer">
-        <span>KAT</span>
-        <span className={styles.topBarWord}>is</span>
-        <span className={styles.topBarWord}>a</span>
-        <span>designer</span>
+      <div className={styles.topBar} aria-label="katszewczyk">
+        <span>KAT.SZEWCZYK</span>
+        <span>halo@katszewczyk.com</span>
       </div>
 
       <h1 className={styles.tagline}>
-        with a special love for visual communication and turning chaos into clarity.
+        I'm a designer with a special love for visual communication and turning chaos into clarity.
       </h1>
 
       <div className={styles.bottomBar}>
         <div className={styles.bottomBarLeft}>
           <Button href="/works">works</Button>
         </div>
-        <HeartIcon />
         <div className={styles.bottomBarRight}>
           <Button onClick={onOpenAbout}>read about</Button>
         </div>

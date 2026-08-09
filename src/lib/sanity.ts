@@ -13,6 +13,7 @@ const PROJECTS_QUERY = `
     title,
     "slug": slug.current,
     coverImage,
+    hoverDescription,
     year,
     services
   }
@@ -23,6 +24,7 @@ const PROJECT_BY_SLUG_QUERY = `
     title,
     "slug": slug.current,
     coverImage,
+    hoverDescription,
     year,
     services
   }

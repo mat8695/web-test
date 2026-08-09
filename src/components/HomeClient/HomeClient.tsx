@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import PageTransition from "@/components/PageTransition/PageTransition";
 import Hero from "@/components/Hero/Hero";
 import AboutOverlay from "@/components/AboutOverlay/AboutOverlay";
+import { ENABLE_PAGE_LOADER } from "@/lib/featureFlags";
 
 type IntroStatus = "checking" | "playing" | "done";
 
@@ -12,7 +13,7 @@ export default function HomeClient() {
   const [showAbout, setShowAbout] = useState(false);
 
   useEffect(() => {
-    if (sessionStorage.getItem("introPlayed")) {
+    if (!ENABLE_PAGE_LOADER || sessionStorage.getItem("introPlayed")) {
       setIntroStatus("done");
     } else {
       setIntroStatus("playing");
