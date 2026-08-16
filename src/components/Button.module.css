@@ -83,7 +83,10 @@
   z-index: 2;
   color: #1e1e1e;
   font-family: 'Booton', Arial, Helvetica, sans-serif;
-  font-size: 16px;
+  /* Inherits font-size from .button (not hardcoded) so the reveal text
+     never jumps to a different size than the resting text on hover —
+     matters for variants/instances that set their own font-size. */
+  font-size: inherit;
   font-weight: 500;
   line-height: normal;
   white-space: nowrap;
@@ -109,8 +112,50 @@
 
 .button[data-variant="sectionTitle"] .textHover {
   display: block;
-  font-size: 40px;
   white-space: normal;
   word-break: break-word;
   text-align: left;
+}
+
+/* ── plain variant ─────────────────────────────────────────────────── */
+/* Same fill + text-invert hover animation as "default", but no border,
+   and a static (never animated) tight radius/padding — no scale/shape
+   morph. Used for left-aligned inline text like a nav list item. */
+
+.button[data-variant="plain"] {
+  border: none;
+  border-radius: 0px;
+  padding: 2px 6px;
+  margin-left: -6px;
+  justify-content: flex-start;
+}
+
+.button[data-variant="plain"] .textDefault {
+  color: #ffcde0;
+}
+
+/* ── footer variant ────────────────────────────────────────────────── */
+/* Same fill + text-invert hover animation as "plain" (and the Services
+   category links it was copied from), just recolored for the footer's
+   pink background: dark text at rest, dark fill sweeps in on hover,
+   text flips to pink. */
+
+.button[data-variant="footer"] {
+  border: none;
+  border-radius: 0px;
+  padding: 2px 6px;
+  margin-left: -6px;
+  justify-content: flex-start;
+}
+
+.button[data-variant="footer"] .textDefault {
+  color: #1e1e1e;
+}
+
+.button[data-variant="footer"] .fill {
+  background-color: #1e1e1e;
+}
+
+.button[data-variant="footer"] .textHover {
+  color: #ffcce0;
 }

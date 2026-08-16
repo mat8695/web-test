@@ -29,17 +29,22 @@ export function ProjectCard({ project }: ProjectCardProps) {
     ? urlFor(project.coverImage).width(860).url()
     : null;
 
+  // Desktop-only hide/reveal — on mobile there's no hover, so the panel
+  // (title/description) just stays permanently open, like the hovered
+  // desktop state.
   useEffect(() => {
-    if (panelRef.current) {
+    if (panelRef.current && window.matchMedia("(min-width: 811px)").matches) {
       gsap.set(panelRef.current, { yPercent: 100 });
     }
   }, []);
 
   const handleMouseEnter = () => {
+    if (!window.matchMedia("(min-width: 811px)").matches) return;
     gsap.to(panelRef.current, { yPercent: 0, duration: 0.5, ease: "power3.out" });
   };
 
   const handleMouseLeave = () => {
+    if (!window.matchMedia("(min-width: 811px)").matches) return;
     gsap.to(panelRef.current, { yPercent: 100, duration: 0.5, ease: "power3.out" });
   };
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import styles from "./BackgroundGrid.module.css";
@@ -8,10 +8,44 @@ import styles from "./BackgroundGrid.module.css";
 gsap.registerPlugin(ScrollTrigger);
 
 const GRID_DENSITY = 12;
+const MOBILE_GRID_DENSITY = 8;
 
 export function BackgroundGrid() {
   const svgRef = useRef<SVGSVGElement>(null);
-  const indices = Array.from({ length: GRID_DENSITY + 1 }, (_, i) => i);
+  const [size, setSize] = useState({ width: 0, height: 0 });
+
+  useEffect(() => {
+    const svg = svgRef.current;
+    if (!svg) return;
+
+    const updateSize = () => {
+      const rect = svg.getBoundingClientRect();
+
+      setSize({
+        width: rect.width,
+        height: rect.height,
+      });
+    };
+
+    updateSize();
+
+    const resizeObserver = new ResizeObserver(updateSize);
+    resizeObserver.observe(svg);
+
+    return () => resizeObserver.disconnect();
+  }, []);
+
+  // Horizontal line count doubles on mobile only — vertical lines and
+  // desktop are untouched.
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 810px)");
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
 
   useEffect(() => {
     const svg = svgRef.current;
@@ -32,7 +66,7 @@ export function BackgroundGrid() {
             if (index === 0) return 420;
             if (index === 2) return -420;
             return 0;
-          }
+          },
         },
         {
           opacity: 1,
@@ -56,6 +90,24 @@ export function BackgroundGrid() {
     return () => ctx.revert();
   }, []);
 
+  // Mobile fits exactly 8 squares across the width — same cellSize for
+  // both axes, so cells stay square. Desktop keeps its own density.
+  const density = isMobile ? MOBILE_GRID_DENSITY : GRID_DENSITY;
+  const cellSize = size.width / density;
+
+  const verticalLines = Array.from(
+    { length: density + 1 },
+    (_, i) => i * cellSize
+  );
+
+  const horizontalLines =
+    cellSize > 0
+      ? Array.from(
+          { length: Math.ceil(size.height / cellSize) + 1 },
+          (_, i) => i * cellSize
+        )
+      : [];
+
   return (
     <svg
       ref={svgRef}
@@ -63,24 +115,24 @@ export function BackgroundGrid() {
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
     >
-      {indices.map((i) => (
+      {verticalLines.map((x, i) => (
         <line
           key={`v${i}`}
-          x1={`${(i / GRID_DENSITY) * 100}%`}
+          x1={x}
           y1="0"
-          x2={`${(i / GRID_DENSITY) * 100}%`}
-          y2="100%"
+          x2={x}
+          y2={size.height}
           className={`${styles.line} ${styles.verticalLine}`}
         />
       ))}
 
-      {indices.map((i) => (
+      {horizontalLines.map((y, i) => (
         <line
           key={`h${i}`}
           x1="0"
-          y1={`${(i / GRID_DENSITY) * 100}%`}
-          x2="100%"
-          y2={`${(i / GRID_DENSITY) * 100}%`}
+          y1={y}
+          x2={size.width}
+          y2={y}
           className={`${styles.line} ${styles.horizontalLine}`}
         />
       ))}

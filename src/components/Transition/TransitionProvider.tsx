@@ -30,19 +30,41 @@ export function usePageTransition() {
 export function TransitionProvider({ children }: { children: ReactNode }) {
   const panelRef = useRef<HTMLDivElement>(null);
   const isAnimating = useRef(false);
+  // Set on the browser's own back/forward navigation (popstate). navigate()
+  // below is the only path that ever puts the panel in its "covering"
+  // state (y: 0%) — back/forward skips navigate() entirely, so the panel
+  // is already sitting hidden (y: 100%) from the last reveal. Without this
+  // flag, the reveal effect would animate it from 100% to -100%, sweeping
+  // straight back through the covering position and flashing pink across
+  // the screen for no reason.
+  const isBackForwardNav = useRef(false);
   const router = useRouter();
   const pathname = usePathname();
 
+  useEffect(() => {
+    const handlePopState = () => {
+      isBackForwardNav.current = true;
+    };
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
+
   // Runs on initial mount and on every pathname change.
   // Both cases: panel is at y:0% covering the page — reveal upward.
-  // On first visit the heart loader (same #ffcde0 colour) covers the page
-  // underneath while the panel slides away, so there is no visible seam.
   useIsomorphicLayoutEffect(() => {
     const panel = panelRef.current;
     if (!panel) return;
 
     // Sanity Studio has its own UI — skip the transition overlay entirely.
     if (pathname.startsWith("/studio")) {
+      gsap.set(panel, { y: "100%" });
+      return;
+    }
+
+    // Back/forward: the panel is already hidden and never covered, so
+    // there's nothing to reveal — just leave it put, no animation.
+    if (isBackForwardNav.current) {
+      isBackForwardNav.current = false;
       gsap.set(panel, { y: "100%" });
       return;
     }

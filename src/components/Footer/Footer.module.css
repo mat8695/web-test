@@ -1,0 +1,264 @@
+.footer {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0px;
+  box-sizing: border-box;
+  background-color: #1e1e1e;
+}
+
+/* Box is always full-size — GSAP (desktop only, see Footer.tsx) never
+   touches width/height (that forces layout on every tick and was
+   causing scroll stutter). Instead it animates transform: translateY +
+   scale, which is compositor-only, so the collapsed state is this same
+   box visually scaled down rather than an actually-smaller box. */
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+  padding: 80px 80px 24px;
+  box-sizing: border-box;
+  background-color: #ffcce0;
+  color: #1e1e1e;
+  font-family: 'Booton', Arial, Helvetica, sans-serif;
+}
+
+/* ── Top row: nav columns + email ─────────────────────────────────── */
+
+.topRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.columns {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.column {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  width: 229px;
+}
+
+.label {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: normal;
+  white-space: nowrap;
+  color: #1e1e1e;
+}
+
+.linkList {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  width: 179px;
+}
+
+/* Element-type selector so this reliably beats Button.module.css's plain
+   .button rule regardless of CSS module bundling/source order. */
+a.link,
+button.link {
+  font-size: 24px;
+}
+
+.email {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: normal;
+  text-align: right;
+  color: #1e1e1e;
+  white-space: nowrap;
+}
+
+/* ── Footer bottom: lead form + bottom row, grouped so .card keeps
+   exactly two space-between children (.topRow stays pinned top, this
+   group stays pinned bottom, unchanged from before the form existed) ── */
+
+.footerBottom {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  width: 100%;
+}
+
+.formBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.leadForm {
+  display: flex;
+  align-items: flex-end;
+  gap: 24px;
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.input {
+  width: 179px;
+  margin: 0;
+  padding: 8px 12px;
+  border: none;
+  border-bottom: 1px solid #1e1e1e;
+  border-radius: 0;
+  background: transparent;
+  font-family: 'Booton', Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: normal;
+  color: #1e1e1e;
+  box-sizing: border-box;
+  outline: none;
+  appearance: none;
+}
+
+.input::placeholder {
+  color: #1e1e1e;
+  opacity: 1;
+}
+
+/* Arrow.tsx points down by default; -90deg matches the "forward" rotation
+   already used for arrowNext elsewhere (Testimonials). */
+.submitArrow {
+  transform: rotate(-90deg);
+  flex-shrink: 0;
+}
+
+/* Two Arrow instances (54px desktop / 58px mobile, per Figma) toggled by
+   display — Arrow's size is a fixed inline style, not responsive on its
+   own, so this mirrors the same per-breakpoint-instance pattern already
+   used for the carousel arrows in Testimonials. */
+.submitArrowMobile {
+  display: none;
+}
+
+.formStatus {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: normal;
+  color: #1e1e1e;
+}
+
+/* Duplicate of .email, shown only on mobile between the form and the
+   bottom row — see @media block below. Hidden on desktop, where the
+   original .email inside .topRow (top-right) is the one that's visible. */
+.emailMobileOnly {
+  display: none;
+}
+
+/* ── Bottom row ────────────────────────────────────────────────────── */
+
+.bottomRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: normal;
+  color: #1e1e1e;
+}
+
+/* ── Responsive ────────────────────────────────────────────────────── */
+
+@media (max-width: 810px) {
+
+  .footer {
+    height: 100dvh;
+  }
+
+  .card {
+    padding: 40px 24px 16px;
+    width: 100%;
+    height: 100%;
+    gap: 0;
+  }
+
+  .topRow {
+    flex-direction: column;
+    align-items: flex-start;
+    height: 100%;
+    gap: 32px;
+  }
+
+  .columns {
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  /* Explore/Socials nad linkami */
+
+  .column {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    width: auto;
+  }
+
+  .linkList {
+    gap: 12px;
+    width: auto;
+  }
+
+  /* Zepchnij mail na dół */
+
+  .email {
+    /* Relocated below the lead form on mobile — see .emailMobileOnly,
+       which reuses this same typography further down in DOM order. */
+    display: none;
+  }
+
+  a.link,
+  button.link {
+    font-size: 30px;
+  }
+
+  /* Form moves above the email/bottom-row info block on mobile, per
+     Figma — the group's own gap shrinks from 48px (desktop) to Figma's
+     24px, and the form gets its own 48px vertical breathing room. */
+  .footerBottom {
+    gap: 24px;
+  }
+
+  .leadForm {
+    width: 100%;
+    justify-content: space-between;
+    padding: 48px 0;
+  }
+
+  .submitArrowDesktop {
+    display: none;
+  }
+
+  .submitArrowMobile {
+    display: inline-flex;
+  }
+
+  .emailMobileOnly {
+    display: block;
+    margin-top: 0;
+    text-align: left;
+    font-size: 18px;
+    padding-bottom: 24px;
+  }
+}

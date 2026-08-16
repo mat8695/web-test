@@ -22,6 +22,13 @@ export const serviceItemType = defineType({
       options: { hotspot: true },
     }),
     defineField({
+      name: "serviceCategory",
+      title: "Service Category",
+      type: "reference",
+      to: [{ type: "service" }],
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
       name: "order",
       title: "Order",
       type: "number",

@@ -1,6 +1,6 @@
 import { client } from "@/sanity/lib/client";
 import type { SanityProject } from "@/components/Works/types";
-import type { SanityServiceItem } from "@/components/Services/types";
+import type { SanityServiceItem, SanityServiceCategory } from "@/components/Services/types";
 import type { SanityTestimonial } from "@/components/Testimonials/types";
 
 const fetchOptions =
@@ -66,6 +66,38 @@ export async function getServiceItems(): Promise<SanityServiceItem[]> {
   try {
     const items = await client.fetch<SanityServiceItem[]>(SERVICE_ITEMS_QUERY, {}, fetchOptions);
     return items ?? [];
+  } catch {
+    return [];
+  }
+}
+
+const SERVICE_CATEGORIES_QUERY = `
+  *[_type == "service"] | order(order asc) {
+    _id,
+    title,
+    image,
+    order,
+    "subcategories": *[
+      _type == "serviceItem" &&
+      references(^._id)
+    ] | order(order asc) {
+      _id,
+      title,
+      description,
+      image,
+      order
+    }
+  }
+`;
+
+export async function getServiceCategories(): Promise<SanityServiceCategory[]> {
+  try {
+    const categories = await client.fetch<SanityServiceCategory[]>(
+      SERVICE_CATEGORIES_QUERY,
+      {},
+      fetchOptions
+    );
+    return categories ?? [];
   } catch {
     return [];
   }

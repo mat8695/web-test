@@ -5,6 +5,7 @@
  */
 
 import {visionTool} from '@sanity/vision'
+import {PublishIcon} from '@sanity/icons'
 import {defineConfig} from 'sanity'
 import {structureTool} from 'sanity/structure'
 
@@ -12,6 +13,7 @@ import {structureTool} from 'sanity/structure'
 import {apiVersion, dataset, projectId} from './src/sanity/env'
 import {schema} from './src/sanity/schemaTypes'
 import {structure} from './src/sanity/structure'
+import PublishAllChanges from './src/sanity/tools/PublishAllChanges'
 
 export default defineConfig({
   basePath: '/studio',
@@ -24,5 +26,13 @@ export default defineConfig({
     // Vision is for querying with GROQ from inside the Studio
     // https://www.sanity.io/docs/the-vision-plugin
     visionTool({defaultApiVersion: apiVersion}),
+  ],
+  tools: [
+    {
+      name: 'publish-all',
+      title: 'Publish All Changes',
+      icon: PublishIcon,
+      component: PublishAllChanges,
+    },
   ],
 })

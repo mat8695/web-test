@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useRef, type CSSProperties, type ReactNode } from "react";
 import gsap from "gsap";
 import { SHARP_EASE } from "@/lib/easing";
 import styles from "./Button.module.css";
 
-export type ButtonVariant = "default" | "sectionTitle";
+export type ButtonVariant = "default" | "sectionTitle" | "plain" | "footer";
 
 export interface ButtonProps {
   children: ReactNode;
@@ -13,6 +13,7 @@ export interface ButtonProps {
   onClick?: () => void;
   onMouseEnter?: () => void;
   className?: string;
+  style?: CSSProperties;
   variant?: ButtonVariant;
 }
 
@@ -22,6 +23,7 @@ export default function Button({
   onClick,
   onMouseEnter: onMouseEnterProp,
   className,
+  style,
   variant = "default",
 }: ButtonProps) {
   const anchorRef = useRef<HTMLAnchorElement>(null);
@@ -77,11 +79,18 @@ export default function Button({
     };
   }, [variant]);
 
+  // Hover animation is desktop-only — on mobile there's no hover intent,
+  // and touch devices can fire a synthetic mouseenter right before tap.
+  const isDesktop = () =>
+    typeof window !== "undefined" && window.matchMedia("(min-width: 811px)").matches;
+
   const handleMouseEnter = () => {
-    tlRef.current?.play();
+    if (isDesktop()) tlRef.current?.play();
     onMouseEnterProp?.();
   };
-  const handleMouseLeave = () => tlRef.current?.reverse();
+  const handleMouseLeave = () => {
+    if (isDesktop()) tlRef.current?.reverse();
+  };
 
   const cls = [styles.button, className].filter(Boolean).join(" ");
 
@@ -100,6 +109,7 @@ export default function Button({
       ref={anchorRef}
       href={href}
       className={cls}
+      style={style}
       data-variant={variant}
       onClick={onClick}
       onMouseEnter={handleMouseEnter}
@@ -112,6 +122,7 @@ export default function Button({
       ref={buttonElRef}
       type="button"
       className={cls}
+      style={style}
       data-variant={variant}
       onClick={onClick}
       onMouseEnter={handleMouseEnter}

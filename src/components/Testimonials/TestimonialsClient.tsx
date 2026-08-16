@@ -28,11 +28,11 @@ export default function TestimonialsClient({ testimonials }: TestimonialsClientP
     const card = cardRef.current;
     if (!section || !card) return;
 
-    // Desktop-only: the mobile layout is a stacked, non-widthed card and
-    // isn't part of this reveal.
+    // Desktop-only: tablet/mobile use the stacked .tabletCard/.mobileCard
+    // layout (≤1200px) and aren't part of this reveal.
     const mm = gsap.matchMedia();
 
-    mm.add("(min-width: 811px)", () => {
+    mm.add("(min-width: 1201px)", () => {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
@@ -51,8 +51,8 @@ export default function TestimonialsClient({ testimonials }: TestimonialsClientP
       if (leftQuoteRef.current) {
         tl.fromTo(
           leftQuoteRef.current,
-          { opacity: 0, y: 40, width: "80%" },
-          { opacity: 1, duration: 0.4, y: 0, ease: "circ.out", width: "80%"}
+          { opacity: 0, y: 40},
+          { opacity: 1, duration: 0.4, y: 0, ease: "circ.out"}
         );
       }
 
@@ -60,8 +60,8 @@ export default function TestimonialsClient({ testimonials }: TestimonialsClientP
       if (rightQuoteRef.current) {
         tl.fromTo(
           [rightQuoteRef.current,],
-          { opacity: 0, y: 40, width: "80%" },
-          { opacity: 1, duration: 0.3, y: 0, ease: "circ.out", width: "80%" }
+          { opacity: 0, y: 40},
+          { opacity: 1, duration: 0.3, y: 0, ease: "circ.out"}
         );
       }
       
@@ -155,30 +155,59 @@ export default function TestimonialsClient({ testimonials }: TestimonialsClientP
           )}
         </div>
 
-        <div className={styles.mobileCard}>
-          <div className={styles.mobileTop}>
-            <div className={styles.mobileTitleRow}>
-              <h2 className={styles.mobileTitle}>Love Notes</h2>
+        <div className={styles.tabletCard}>
+          <div className={styles.tabletTop}>
+            <h2 className={styles.mobileTitle}>Love Notes</h2>
+            <blockquote className={styles.tabletQuote}>
+              <p>{quotePl}</p>
+            </blockquote>
+          </div>
+          <div className={styles.mobileDivider} aria-hidden="true" />
+          <div className={styles.tabletContent}>
+            <div className={styles.tabletQuoteRow}>
+              <Arrow
+                onClick={cycle}
+                ariaLabel="Previous testimonial"
+                size={58}
+                className={styles.arrowPrev}
+              />
+              <blockquote className={styles.tabletQuoteEn}>
+                <p>{quoteEn}</p>
+              </blockquote>
+            </div>
+            <div className={styles.mobileBottom}>
+              <p className={styles.mobileAuthor}>{author}</p>
               <Arrow
                 onClick={cycle}
                 ariaLabel="Next testimonial"
-                size={49}
+                size={58}
                 className={styles.arrowNext}
               />
             </div>
+          </div>
+        </div>
+
+        <div className={styles.mobileCard}>
+          <div className={styles.mobileTop}>
+            <h2 className={styles.mobileTitle}>Love Notes</h2>
             <blockquote className={styles.mobileQuote}>
               <p>{quotePl}</p>
             </blockquote>
           </div>
           <div className={styles.mobileDivider} aria-hidden="true" />
-          <div className={styles.mobileBottom}>
-            <p className={styles.mobileAuthor}>{author}</p>
-            <Arrow
-              onClick={cycle}
-              ariaLabel="Previous testimonial"
-              size={62}
-              className={styles.arrowPrev}
-            />
+          <div className={styles.mobileContent}>
+            <blockquote className={styles.mobileQuoteEn}>
+              <p>{quoteEn}</p>
+            </blockquote>
+            <div className={styles.mobileBottom}>
+              <p className={styles.mobileAuthor}>{author}</p>
+              <Arrow
+                onClick={cycle}
+                ariaLabel="Next testimonial"
+                size={58}
+                className={styles.arrowNext}
+              />
+            </div>
           </div>
         </div>
       </div>
