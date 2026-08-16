@@ -19,7 +19,7 @@
   width: 100%;
   padding: 17px 0;
   overflow: hidden;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Booton', Arial, Helvetica, sans-serif;
   font-size: 16px;
   font-weight: 500;
   line-height: 1;
@@ -27,19 +27,46 @@
   text-align: center;
 }
 
-.topBarWord {
-  width: 104px;
-  text-align: center;
-}
-
 /* ── Tagline ─────────────────────────────────────────── */
 
+.taglineWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.heartAnimation {
+  --heart-color: #f7a9c5;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(55vw, 55vh, 650px);
+  /* Fallback before the JSON loads; Hero.tsx overrides this inline with
+     the source file's own "aspect" value, so swapping in a differently
+     shaped animation.json needs no CSS changes. */
+  aspect-ratio: 1;
+  opacity: 0.45;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.heartCanvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 .tagline {
-  max-width: 950px;
+  position: relative;
+  z-index: 1;
+  max-width: 1400px;
   font-family: 'Reckless Standard M-TRIAL', Georgia, serif;
-  font-size: 78px;
+  font-size: clamp(32px, 6vw, 78px);
   font-weight: 400;
-  line-height: 1;
+  line-height: 1.15;
   color: #f7a9c5;
   text-align: center;
 }
@@ -47,18 +74,12 @@
 /* ── Bottom bar ──────────────────────────────────────── */
 
 .bottomBar {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  display: flex;
   align-items: center;
+  justify-content: space-between;
   width: 100%;
   padding: 17px 0;
   overflow: hidden;
-}
-
-.heart {
-  width: 20px;
-  height: 18px;
-  display: block;
 }
 
 .bottomBarLeft {
@@ -69,4 +90,70 @@
 .bottomBarRight {
   display: flex;
   justify-content: flex-end;
+}
+
+/* ── Responsive ──────────────────────────────────────── */
+
+@media (max-width: 810px) {
+  .hero {
+    /* No longer a fixed/tall scroll-distance box — topBar, heartStage
+       and heroContent just stack in normal flow, so height follows
+       content. min-height keeps the heart stage's initial "prominently
+       visible" framing even when heroContent is short. */
+    height: 100vh;
+    justify-content: flex-start;
+    padding: 24px;
+  }
+
+  .heartAnimation {
+    width: min(80vw, 500px);
+  }
+
+  .topBar {
+    font-size: 14px;
+  }
+
+  .tagline {
+    font-size: 36px;
+    text-align: left;
+  }
+}
+
+/* ── Mobile: heart-only sticky stage ───────────────────
+   Rendered only by Hero.tsx's isMobile branch, so these aren't scoped
+   inside the media query above — they simply don't exist in the DOM on
+   desktop. Only the heart is inside a sticky/scroll-linked box; the
+   headline and buttons (.heroContent) are normal in-flow siblings, so
+   nothing here clips or scrubs a transform on them (that combination is
+   what caused Safari to lose the headline's paint after scrolling
+   stopped). */
+
+.heartStage {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 65dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.heroContent {
+  position: relative;
+  /* Sits above .heartStage while it's still pinned and heroContent is
+     scrolling up past/through it. */
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 48px;
+  width: 100%;
+  padding-top: 24px;
+}
+
+.mobileActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
 }

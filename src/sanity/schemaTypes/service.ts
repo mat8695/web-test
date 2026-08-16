@@ -2,7 +2,7 @@ import { defineField, defineType } from "sanity";
 
 export const serviceType = defineType({
   name: "service",
-  title: "Service",
+  title: "Service Category",
   type: "document",
   fields: [
     defineField({
@@ -20,6 +20,19 @@ export const serviceType = defineType({
       name: "description",
       title: "Description",
       type: "text",
+    }),
+    defineField({
+      name: "image",
+      title: "Default Image",
+      description:
+        "Shown centered when this category is active, or when an active subcategory has no image of its own.",
+      type: "image",
+      options: { hotspot: true },
+    }),
+    defineField({
+      name: "order",
+      title: "Order",
+      type: "number",
     }),
   ],
 });

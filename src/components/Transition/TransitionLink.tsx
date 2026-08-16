@@ -7,9 +7,17 @@ interface TransitionLinkProps {
   href: string;
   children: ReactNode;
   className?: string;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
 }
 
-export function TransitionLink({ href, children, className }: TransitionLinkProps) {
+export function TransitionLink({
+  href,
+  children,
+  className,
+  onMouseEnter,
+  onMouseLeave,
+}: TransitionLinkProps) {
   const { navigate } = usePageTransition();
 
   const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
@@ -22,7 +30,13 @@ export function TransitionLink({ href, children, className }: TransitionLinkProp
   };
 
   return (
-    <a href={href} onClick={handleClick} className={className}>
+    <a
+      href={href}
+      onClick={handleClick}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      className={className}
+    >
       {children}
     </a>
   );

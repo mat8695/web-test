@@ -1,21 +1,60 @@
+/* Wraps the "default" variant only. Statically sized to the hover-state
+   footprint via .sizer, so the animated .button inside can grow/shrink
+   without shifting anything around it. */
+.wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Invisible clone of the button's hover-state box model (same text, same
+   font, hover padding/border). Its rendered size is what reserves space
+   in .wrapper — kept in sync by hand with the --pad-x/--pad-y "to" values
+   in Button.tsx's GSAP tween. */
+.sizer {
+  visibility: hidden;
+  pointer-events: none;
+  padding: 16.5px 22px;
+  border: 1px solid transparent;
+  font-family: 'Booton', Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: normal;
+  white-space: nowrap;
+}
+
 .button {
+  --pad-x: 8px;
+  --pad-y: 4px;
+  --radius: 0px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  padding: 4px 8px;
+  padding: var(--pad-y) var(--pad-x);
+  border-radius: var(--radius);
   border: 1px solid #f7a9c5;
   background: transparent;
   overflow: hidden;
   cursor: pointer;
   text-decoration: none;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Booton', Arial, Helvetica, sans-serif;
   font-size: 16px;
   font-weight: 500;
   line-height: normal;
   white-space: nowrap;
   appearance: none;
   -webkit-appearance: none;
+}
+
+/* Inside .wrapper, take the button out of flow and center it so its own
+   padding-driven growth never affects .wrapper's (fixed) box. */
+.wrapper .button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .fill {
@@ -43,8 +82,11 @@
   justify-content: center;
   z-index: 2;
   color: #1e1e1e;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 16px;
+  font-family: 'Booton', Arial, Helvetica, sans-serif;
+  /* Inherits font-size from .button (not hardcoded) so the reveal text
+     never jumps to a different size than the resting text on hover —
+     matters for variants/instances that set their own font-size. */
+  font-size: inherit;
   font-weight: 500;
   line-height: normal;
   white-space: nowrap;
@@ -70,8 +112,50 @@
 
 .button[data-variant="sectionTitle"] .textHover {
   display: block;
-  font-size: 40px;
   white-space: normal;
   word-break: break-word;
   text-align: left;
+}
+
+/* ── plain variant ─────────────────────────────────────────────────── */
+/* Same fill + text-invert hover animation as "default", but no border,
+   and a static (never animated) tight radius/padding — no scale/shape
+   morph. Used for left-aligned inline text like a nav list item. */
+
+.button[data-variant="plain"] {
+  border: none;
+  border-radius: 0px;
+  padding: 2px 6px;
+  margin-left: -6px;
+  justify-content: flex-start;
+}
+
+.button[data-variant="plain"] .textDefault {
+  color: #ffcde0;
+}
+
+/* ── footer variant ────────────────────────────────────────────────── */
+/* Same fill + text-invert hover animation as "plain" (and the Services
+   category links it was copied from), just recolored for the footer's
+   pink background: dark text at rest, dark fill sweeps in on hover,
+   text flips to pink. */
+
+.button[data-variant="footer"] {
+  border: none;
+  border-radius: 0px;
+  padding: 2px 6px;
+  margin-left: -6px;
+  justify-content: flex-start;
+}
+
+.button[data-variant="footer"] .textDefault {
+  color: #1e1e1e;
+}
+
+.button[data-variant="footer"] .fill {
+  background-color: #1e1e1e;
+}
+
+.button[data-variant="footer"] .textHover {
+  color: #ffcce0;
 }

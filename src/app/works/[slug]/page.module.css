@@ -21,7 +21,7 @@
 
 .meta {
   margin: 0 0 16px;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Booton', Arial, Helvetica, sans-serif;
   font-size: 14px;
   font-weight: 500;
   color: #ffcce0;
@@ -38,7 +38,7 @@
 }
 
 .services li {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Booton', Arial, Helvetica, sans-serif;
   font-size: 12px;
   font-weight: 500;
   color: #ffcce0;

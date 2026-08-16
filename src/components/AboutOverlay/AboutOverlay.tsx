@@ -2,6 +2,8 @@
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
+import { SHARP_EASE } from "@/lib/easing";
+import Arrow from "@/components/Arrow";
 import styles from "./AboutOverlay.module.css";
 
 interface AboutOverlayProps {
@@ -27,28 +29,6 @@ function HeartLogo() {
   );
 }
 
-function CloseArrow() {
-  return (
-    <svg
-      width="62"
-      height="62"
-      viewBox="0 0 62 62"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-    >
-      <circle cx="31" cy="31" r="30.25" stroke="#1e1e1e" strokeWidth="1.5" />
-      <path
-        d="M31 17V45M20 34L31 45L42 34"
-        stroke="#1e1e1e"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
 export default function AboutOverlay({ isOpen, onClose }: AboutOverlayProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
 
@@ -61,12 +41,12 @@ export default function AboutOverlay({ isOpen, onClose }: AboutOverlayProps) {
     if (isOpen) {
       // Make visible before the slide-up begins
       gsap.set(overlay, { opacity: 1, visibility: "visible", pointerEvents: "auto" });
-      tween = gsap.to(overlay, { y: 0, duration: 0.7, ease: "power2.inOut" });
+      tween = gsap.to(overlay, { y: 0, duration: 0.7, ease: SHARP_EASE });
     } else {
       tween = gsap.to(overlay, {
         y: "100%",
         duration: 0.6,
-        ease: "power2.inOut",
+        ease: SHARP_EASE,
         onComplete() {
           // Restore CSS-hidden state after slide-down finishes
           gsap.set(overlay, { opacity: 0, visibility: "hidden", pointerEvents: "none" });
@@ -98,28 +78,31 @@ export default function AboutOverlay({ isOpen, onClose }: AboutOverlayProps) {
         className={styles.photo}
       />
 
-      <div className={styles.text}>
-        <p>
-          I studied Industrial Design at the Academy of Fine Arts in Łódź and Communication Design at the School of Design, University of Leeds. I gained my first professional experience in the United Kingdom, working as a designer at Matthew Brand Solutions in Leeds and The Spicery in Bristol. After returning to Poland, I joined the design studio Fajne Chłopaki in Łódź.
-        </p>
-        <p>
-          Since 2019, I have been running my own design studio, specialising in visual communication for both commercial and social projects. In my practice, I draw on the principles of universal design, treating harmony, structure, and clarity as the foundations of responsible design.
-        </p>
-        <p>
-          Alongside my professional projects, I also lead independent workshops for emerging designers and brand owners, sharing knowledge and practical tools in visual communication and branding. Since 2023, I have been teaching design courses at the Faculty of Arts at Jan Kochanowski University, and since 2026, I have been conducting doctoral research on accessibility in visual communication.
-        </p>
-        <p>
-          Travel is an inseparable part of my life — the attentive observation of everyday life across different cultures and religions is a constant source of inspiration for me, shaping both my design solutions and my broader approach to life.
-        </p>
+      <div className={styles.arrowRow}>
+        <Arrow
+          onClick={onClose}
+          ariaLabel="Close about panel"
+          size={68}
+          className={styles.closeButton}
+        />
       </div>
 
-      <button
-        className={styles.closeButton}
-        onClick={onClose}
-        aria-label="Close about panel"
-      >
-        <CloseArrow />
-      </button>
+      <div className={styles.scrollArea}>
+        <div className={styles.text}>
+          <p>
+            I studied Industrial Design at the Academy of Fine Arts in Łódź and Communication Design at the School of Design, University of Leeds. I gained my first professional experience in the United Kingdom, working as a designer at Matthew Brand Solutions in Leeds and The Spicery in Bristol. After returning to Poland, I joined the design studio Fajne Chłopaki in Łódź.
+          </p>
+          <p>
+            Since 2019, I have been running my own design studio, specialising in visual communication for both commercial and social projects. In my practice, I draw on the principles of universal design, treating harmony, structure, and clarity as the foundations of responsible design.
+          </p>
+          <p>
+            Alongside my professional projects, I also lead independent workshops for emerging designers and brand owners, sharing knowledge and practical tools in visual communication and branding. Since 2023, I have been teaching design courses at the Faculty of Arts at Jan Kochanowski University, and since 2026, I have been conducting doctoral research on accessibility in visual communication.
+          </p>
+          <p>
+            Travel is an inseparable part of my life — the attentive observation of everyday life across different cultures and religions is a constant source of inspiration for me, shaping both my design solutions and my broader approach to life.
+          </p>
+        </div>
+      </div>
     </div>
   );
 }

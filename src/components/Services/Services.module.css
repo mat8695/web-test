@@ -6,67 +6,63 @@
   box-sizing: border-box;
 }
 
-/* ── Desktop layout ────────────────────────────────────────────────── */
+/* ── Desktop: three-column, image-centered grid ──────────────────────── */
 
 .content {
-  display: flex;
-  align-items: stretch;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-areas: "left image right";
+  align-items: center;
+  column-gap: 80px;
   min-height: 100vh;
-  padding: 0 0 0 80px;
-  gap: 40px;
+  padding: 0 80px;
   box-sizing: border-box;
 }
 
 .left {
-  flex: 1;
+  grid-area: left;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 12px;
   min-width: 0;
-  padding: 80px 0;
+  align-items: center;
 }
 
-.heading {
+.right {
+  grid-area: right;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  /* Figma: subcategory block sits 80px inset from its column's own edge
+     (unlike the left column, which is flush) — matches the reference. */
+  padding-right: 80px;
+  min-width: 0;
+  box-sizing: border-box;
+  align-items: center;
 }
 
-.subtitle {
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 24px;
-  font-weight: 500;
-  color: #ffcde0;
-  max-width: 400px;
-  line-height: 1.3;
-}
-
-.divider {
-  width: 253px;
-  height: 2px;
-  background-color: #ffcde0;
-  flex-shrink: 0;
-}
-
-.serviceList {
+.categoryList {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 4px;
+  gap: 16px;
 }
 
-.mobileServiceList {
+.mobileCategoryList,
+.mobileSubcategoryList {
   display: none;
 }
 
 /* ── Image stack ───────────────────────────────────────────────────── */
 
 .imageArea {
-  flex: 0 0 50vw;
-  height: 100vh;
+  grid-area: image;
+  width: 100%;
+  max-width: 100%;
+  aspect-ratio: 480 / 380;
   position: relative;
   overflow: hidden;
+  border-radius: 0px;
+  flex-shrink: 0;
 }
 
 .defaultSlide {
@@ -83,73 +79,102 @@
 }
 
 .image {
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  inset: -1px;
+  width: calc(100% + 2px);
+  height: calc(100% + 2px);
   object-fit: cover;
   display: block;
 }
 
-/* ── Mobile layout ─────────────────────────────────────────────────── */
+/* ── Subcategories ─────────────────────────────────────────────────── */
+
+.subcategoryList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.subcategoryItem {
+  border: none;
+  background: none;
+  padding: 0;
+  font-family: 'Booton', Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: normal;
+  color: #ffcde0;
+  cursor: pointer;
+  text-align: left;
+  transition: opacity 0.2s ease;
+}
+
+.subcategoryItemActive {
+  text-decoration: underline;
+}
+
+/* ── Mobile ────────────────────────────────────────────────────────── */
 
 @media (max-width: 767px) {
-  .section {
-    min-height: auto;
-  }
-
   .content {
-    flex-direction: column;
+    grid-template-columns: 1fr;
+    grid-template-areas: "left" "image" "right";
     min-height: auto;
     padding: 16px;
     gap: 24px;
   }
 
+  .right {
+    display: none;
+  }
+
   .imageArea {
-    flex: none;
     width: 100%;
-    height: auto;
     aspect-ratio: 343 / 420;
     order: -1;
   }
 
-  .left {
-    padding: 0;
-    gap: 8px;
-    justify-content: flex-start;
-  }
-
-  .heading {
-    gap: 4px;
-  }
-
-  .subtitle {
-    font-size: 18px;
-    max-width: 100%;
-  }
-
-  .divider {
-    width: 264px;
-  }
-
-  /* Hide interactive buttons on mobile */
-  .serviceList {
+  /* Hide interactive desktop list, show plain non-interactive one instead
+     — avoids tap events fighting the auto-cycle interval on touch. */
+  .categoryList {
     display: none;
   }
 
-  /* Show plain text list */
-  .mobileServiceList {
+  .mobileCategoryList {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 48px;
     list-style: none;
     margin: 0;
     padding: 0;
   }
 
-  .mobileServiceItem {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 14px;
+  .mobileCategoryLabel {
+    margin: 0 0 8px;
+    font-family: 'Booton', Arial, Helvetica, sans-serif;
+    font-size: 16px;
     font-weight: 500;
-    color: #ffcce0;
+    color: #ffcde0;
+    line-height: normal;
+  }
+
+  .mobileSubcategoryList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .mobileSubcategoryItem {
+    font-family: 'Booton', Arial, Helvetica, sans-serif;
+    font-size: 30px;
+    font-weight: 500;
+    color: #ffcde0;
     line-height: normal;
   }
 }

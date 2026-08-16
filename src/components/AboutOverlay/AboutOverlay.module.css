@@ -2,53 +2,66 @@
   position: fixed;
   inset: 0;
   z-index: 50;
+
   width: 100%;
   height: 100vh;
-  background-color: #f7a9c5;
-  padding: 40px 80px 64px;
+
+  padding: 32px;
   box-sizing: border-box;
+
+  background-color: #FFCCE0;
+
   display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  overflow-y: auto;
-  /* Hidden by default — GSAP animates open/close, but CSS owns the resting state
-     so there is no flash on SSR or before the first useEffect fires */
+  align-items: center;
+  gap: 220px;
+
+  overflow: hidden;
+
+  /* Hidden by default — GSAP controls open/close */
   transform: translateY(100%);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
 }
 
-/* Heart logo — top left */
-.logo {
-  position: absolute;
-  top: 39px;
-  left: 80px;
-}
+/* ── Decorative assets ─────────────────────────────── */
 
-/* Portrait photo — top right */
+.logo,
 .photo {
-  position: absolute;
-  top: 54px;
-  right: 80px;
-  width: 384px;
-  height: 446px;
-  object-fit: cover;
-  pointer-events: none;
-  user-select: none;
+  display: none;
 }
 
-/* Bio text — bottom left, leaves room for the photo */
+/* ── Scrollable text ───────────────────────────────── */
+
+.scrollArea {
+  order: 1;
+
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  max-height: 100%;
+  padding-top: 33.333vh;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
 .text {
-  max-width: 760px;
+  width: 100%;
+  max-width: 1920px;
 }
 
 .text p {
   margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 18px;
+
+  font-family: 'Booton', Arial, Helvetica, sans-serif;
+  font-size: 38px;
   font-weight: 500;
-  line-height: 1.35;
+  line-height: 1.15;
+
   color: #1e1e1e;
 }
 
@@ -56,18 +69,91 @@
   margin-top: 1em;
 }
 
-/* Close arrow — bottom right */
-.closeButton {
-  position: absolute;
-  bottom: 40px;
-  right: 46px;
-  width: 62px;
-  height: 62px;
-  padding: 0;
-  background: none;
-  border: none;
-  cursor: pointer;
+/* ── Arrow ─────────────────────────────────────────── */
+
+.arrowRow {
+  order: 2;
+
+  flex: 0 0 auto;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
+  pointer-events: auto;
+}
+
+.closeButton {
+  position: relative;
+  flex-shrink: 0;
+  pointer-events: auto;
+}
+
+/* ── Tablet: 811–1200px ───────────────────────────── */
+
+@media (max-width: 1200px) {
+  .overlay {
+    padding: 16px;
+
+    flex-direction: column;
+    align-items: stretch;
+
+    gap: 0;
+  }
+
+  .arrowRow {
+    order: 1;
+
+    flex: 0 0 auto;
+
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    padding-bottom: 8px;
+
+    pointer-events: auto;
+  }
+
+  .closeButton {
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .scrollArea {
+    order: 2;
+
+    flex: 1 1 auto;
+
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+    max-height: none;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .text {
+    width: 100%;
+    max-width: none;
+  }
+
+  .text p {
+    font-size: 30px;
+  }
+}
+
+/* ── Mobile: ≤810px ───────────────────────────────── */
+
+@media (max-width: 810px) {
+  .text p {
+    font-size: 20px;
+  }
+
+  .text p + p {
+    margin-top: 0.75em;
+  }
 }
