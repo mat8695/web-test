@@ -79,10 +79,10 @@ export default function Footer() {
       });
 
       // Pause: hold the collapsed, centered card in place for 0.5s.
-      tl.to(card, { duration: 0.5 });
+      tl.to(card, { duration: 0.2 });
 
       // Expand to fill the section.
-      tl.to(card, { scale: 1, duration: 1.3, ease: SHARP_EASE });
+      tl.to(card, { scale: 1, duration: 0.8, ease: SHARP_EASE });
     });
 
     return () => mm.revert();

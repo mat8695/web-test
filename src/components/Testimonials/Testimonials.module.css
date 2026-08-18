@@ -165,14 +165,14 @@
 
 .tabletQuote {
   margin: 0;
-  width: 480px;
+  width: 600px;
   max-width: 100%;
 }
 
 .tabletQuote p {
   margin: 0;
   font-family: 'Booton', Arial, Helvetica, sans-serif;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 500;
   line-height: normal;
   color: #1e1e1e;
@@ -197,14 +197,14 @@
 
 .tabletQuoteEn {
   margin: 0;
-  width: 480px;
+  width: 600px;
   max-width: 100%;
 }
 
 .tabletQuoteEn p {
   margin: 0;
   font-family: 'Booton', Arial, Helvetica, sans-serif;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 500;
   line-height: normal;
   color: #1e1e1e;
@@ -293,8 +293,27 @@
 }
 
 @media (min-width: 811px) and (max-width: 1200px) {
+  /* Tablet keeps the full-viewport card (unlike mobile, which shrinks to
+     content) — restore the height the shared ≤1200px reset above clears,
+     and let tabletCard/tabletContent grow to fill it edge-to-edge now
+     that there's real space to grow into. */
+  .testimonials {
+    height: 100vh;
+  }
+
+  .card {
+    height: 100%;
+  }
+
   .tabletCard {
     display: flex;
+    flex: 1 0 0;
+    min-height: 0;
+  }
+
+  .tabletContent {
+    flex: 1 0 0;
+    min-height: 0;
   }
 }
 

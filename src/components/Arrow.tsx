@@ -1,9 +1,14 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 import gsap from "gsap";
 import { SHARP_EASE } from "@/lib/easing";
 import styles from "./Arrow.module.css";
+
+export interface ArrowHandle {
+  play: () => void;
+  reverse: () => void;
+}
 
 export interface ArrowProps {
   /** Circle diameter in px. Defaults to the Figma spec (68px). */
@@ -11,6 +16,11 @@ export interface ArrowProps {
   onClick?: () => void;
   className?: string;
   ariaLabel?: string;
+  /** Set false when a parent drives play()/reverse() itself (via ref) —
+   *  e.g. a hover target larger than the circle itself. Skips Arrow's own
+   *  mouseenter/mouseleave listeners so the two control paths can't fight
+   *  over the same timeline. Defaults true (existing standalone usage). */
+  interactive?: boolean;
 }
 
 // Ratios read off the Figma frames (icon size / circle size).
@@ -32,8 +42,11 @@ function ArrowGlyph() {
   );
 }
 
-export default function Arrow({ size = 68, onClick, className, ariaLabel = "Arrow" }: ArrowProps) {
-  const circleRef = useRef<HTMLButtonElement>(null);
+const Arrow = forwardRef<ArrowHandle, ArrowProps>(function Arrow(
+  { size = 68, onClick, className, ariaLabel = "Arrow", interactive = true },
+  ref
+) {
+  const circleRef = useRef<HTMLButtonElement & HTMLSpanElement>(null);
   const defaultArrowRef = useRef<HTMLSpanElement>(null);
   const hoverArrowRef = useRef<HTMLSpanElement>(null);
   const tlRef = useRef<gsap.core.Timeline | null>(null);
@@ -66,24 +79,24 @@ export default function Arrow({ size = 68, onClick, className, ariaLabel = "Arro
     };
   }, [size]);
 
-  const handleMouseEnter = () => tlRef.current?.play();
-  const handleMouseLeave = () => tlRef.current?.reverse();
+  useImperativeHandle(ref, () => ({
+    play: () => tlRef.current?.play(),
+    reverse: () => tlRef.current?.reverse(),
+  }));
+
+  const handleMouseEnter = () => {
+    if (interactive) tlRef.current?.play();
+  };
+  const handleMouseLeave = () => {
+    if (interactive) tlRef.current?.reverse();
+  };
 
   const cls = [styles.circle, className].filter(Boolean).join(" ");
   const defaultArrowSize = size * DEFAULT_ARROW_RATIO;
   const hoverArrowSize = size * HOVER_ARROW_RATIO;
 
-  return (
-    <button
-      ref={circleRef}
-      type="button"
-      className={cls}
-      style={{ width: size, height: size }}
-      onClick={onClick}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      aria-label={ariaLabel}
-    >
+  const glyphs = (
+    <>
       <span
         className={styles.arrowDefault}
         ref={defaultArrowRef}
@@ -100,6 +113,40 @@ export default function Arrow({ size = 68, onClick, className, ariaLabel = "Arro
       >
         <ArrowGlyph />
       </span>
+    </>
+  );
+
+  // Non-interactive instances render a <span>, not a <button> — Arrow is
+  // meant to sit nested inside a larger externally-controlled hover target
+  // (e.g. a whole clickable row), and a <button> nested inside an <a> is
+  // invalid HTML / breaks the outer link's hit area in some browsers.
+  if (!interactive) {
+    return (
+      <span
+        ref={circleRef}
+        className={cls}
+        style={{ width: size, height: size }}
+        aria-hidden="true"
+      >
+        {glyphs}
+      </span>
+    );
+  }
+
+  return (
+    <button
+      ref={circleRef}
+      type="button"
+      className={cls}
+      style={{ width: size, height: size }}
+      onClick={onClick}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      aria-label={ariaLabel}
+    >
+      {glyphs}
     </button>
   );
-}
+});
+
+export default Arrow;

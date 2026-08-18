@@ -10,21 +10,18 @@
   background-color: #1e1e1e;
 }
 
-/* ── Top bar ─────────────────────────────────────────── */
+/* ── Nav spacer ──────────────────────────────────────── */
 
-.topBar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+/* The real nav bar is now <Navigation>, position: fixed and rendered
+   outside .hero's flex flow — so it no longer occupies space here the
+   way the old in-flow .topBar did. This reserves the same footprint
+   (Navigation's own padding: 24px + font-size line-height) so the
+   tagline/heart below keep their original position instead of sliding
+   up into the gap. */
+.navSpacer {
+  flex-shrink: 0;
   width: 100%;
-  padding: 17px 0;
-  overflow: hidden;
-  font-family: 'Booton', Arial, Helvetica, sans-serif;
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 1;
-  color: #f7a9c5;
-  text-align: center;
+  height: 64px;
 }
 
 /* ── Tagline ─────────────────────────────────────────── */
@@ -38,25 +35,18 @@
 }
 
 .heartAnimation {
-  --heart-color: #f7a9c5;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: min(55vw, 55vh, 650px);
-  /* Fallback before the JSON loads; Hero.tsx overrides this inline with
-     the source file's own "aspect" value, so swapping in a differently
-     shaped animation.json needs no CSS changes. */
+  /* Fallback before the JSON loads; GridAnimation overrides this inline
+     with the source file's own "aspect" value, so swapping in a
+     differently shaped animation.json needs no CSS changes. */
   aspect-ratio: 1;
   opacity: 0.45;
   pointer-events: none;
   z-index: 0;
-}
-
-.heartCanvas {
-  display: block;
-  width: 100%;
-  height: 100%;
 }
 
 .tagline {
@@ -96,7 +86,7 @@
 
 @media (max-width: 810px) {
   .hero {
-    /* No longer a fixed/tall scroll-distance box — topBar, heartStage
+    /* No longer a fixed/tall scroll-distance box — navSpacer, heartStage
        and heroContent just stack in normal flow, so height follows
        content. min-height keeps the heart stage's initial "prominently
        visible" framing even when heroContent is short. */
@@ -109,8 +99,8 @@
     width: min(80vw, 500px);
   }
 
-  .topBar {
-    font-size: 14px;
+  .navSpacer {
+    height: 62px;
   }
 
   .tagline {

@@ -53,6 +53,7 @@
   line-height: normal;
   color: #f7a9c5;
   word-break: break-word;
+  white-space: pre-line;
 }
 
 .footer {

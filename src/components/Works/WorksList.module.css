@@ -1,0 +1,67 @@
+.list {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #1e1e1e;
+  padding: 160px 80px 24px;
+  overflow: visible;
+}
+
+.heading {
+  margin: 0 0 24px;
+  font-family: 'Reckless Standard M-TRIAL', Georgia, serif;
+  font-size: 48px;
+  font-weight: 400;
+  line-height: normal;
+  color: #f7a9c5;
+  word-break: break-word;
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* Cursor-following cover-image preview — purely decorative, sized from
+   the real image's own aspect ratio (no crop), capped so it never
+   dominates the viewport. Positioned/animated entirely via GSAP
+   (WorksList.tsx); the CSS opacity:0 here is just the pre-hydration
+   fallback so it can't flash visible before that JS runs. */
+.imageLayer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: min(420px, 32vw);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 5;
+  will-change: transform, opacity;
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ── Mobile ──────────────────────────────────────────── */
+
+@media (max-width: 810px) {
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 80px 24px 24px;
+  }
+
+  .heading {
+    margin: 0;
+  }
+
+  .mobileRows {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+}

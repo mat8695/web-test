@@ -1,0 +1,336 @@
+/* --hero-side-padding: 80px, matches HORIZONTAL_MARGIN in WorkHero.tsx
+   (used for the image's own width-expansion math) and the Figma
+   reference's side padding.
+   --nav-height: 64px, matches Navigation.module.css's own rendered
+   height (fixed, permanently covers the top of the viewport) — used so
+   .galleryViewport centers images against the visible area below it
+   rather than the full 100vh stage. */
+.hero {
+  position: relative;
+  width: 100%;
+  background-color: #1e1e1e;
+  --hero-side-padding: 80px;
+  --nav-height: 64px;
+}
+
+/* ── Desktop ─────────────────────────────────────────────────────────
+   .pinStage is pinned by GSAP's own ScrollTrigger `pin` option (see
+   WorkHero.tsx), not CSS position: sticky — a single pin covering both
+   the image-expansion stage and the horizontal-gallery stage is what
+   keeps the handoff between them seamless (one continuous track-x
+   tween rather than two independently pinned sections). GSAP manages
+   .pinStage's own position during the pin; position: relative here is
+   only the resting-state base and the containing block for the
+   absolutely-positioned actionsRow/descriptionAnchor below. */
+
+.pinStage {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 80px var(--hero-side-padding) 24px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* Plain layout wrapper only — no position/z-index of its own, so its two
+   children can each set their own stacking level independently (see
+   .metaRow and .headline below) instead of rising or falling together. */
+.metaBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+/* z-index 3: ABOVE .galleryViewport (2) — title/year stay visible and
+   readable for the entire scroll sequence, even once the hero image has
+   grown large enough to otherwise sit on top of this screen area. Never
+   animated/faded (see WorkHero.tsx). */
+.metaRow {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  font-family: 'Booton', Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: normal;
+  color: #ffcce0;
+}
+
+/* z-index 1: BELOW .galleryViewport (2) — the expanding hero image is
+   meant to visually grow over the headline, and it fades out via GSAP
+   as that happens (see WorkHero.tsx). */
+.headline {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  max-width: 700px;
+  font-family: 'Reckless Standard M-TRIAL', Georgia, serif;
+  font-size: 48px;
+  font-weight: 400;
+  line-height: normal;
+  color: #ffcce0;
+  word-break: break-word;
+  /* Respects intentional line breaks typed into hoverDescription in the
+     CMS (default white-space collapses them into a plain space). */
+  white-space: pre-line;
+}
+
+/* Covers the pinStage below the fixed Navigation bar and inset by
+   --hero-side-padding on both sides (not just the row below metaBlock)
+   and sits above it in stacking order — that's what lets the expanding
+   hero image visually grow over the headline/button as requested.
+   top: --nav-height (not 0) is what keeps every image vertically
+   centered in the space you can actually see: Navigation is
+   position: fixed and permanently covers the top of the viewport, so
+   centering against the full 100vh pinned stage made images sit visibly
+   higher than true-center in the visible area. --nav-height matches
+   Navigation.module.css's own rendered height (24px padding + 16px
+   line-height + 24px padding = 64px) — the two aren't otherwise linked,
+   so if Navigation's own sizing ever changes this needs updating too.
+   left/right: --hero-side-padding (not 0) is what makes this box's
+   actual width match WorkHero.tsx's own `viewportWidth` (window.innerWidth
+   minus the same margin) — absolute positioning ignores the parent's
+   padding by default, so without this the box was silently 160px wider
+   than the width every centering calculation assumed, shifting every
+   image left of where it should sit. Still clips the horizontal
+   filmstrip so gallery images (and the mid-tween hero image) never cause
+   real page overflow — only content actually scrolled into view shows. */
+.galleryViewport {
+  position: absolute;
+  inset: var(--nav-height, 64px) var(--hero-side-padding, 80px) 0 var(--hero-side-padding, 80px);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.galleryTrack {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  width: max-content;
+  will-change: transform;
+}
+
+/* Width is driven by GSAP (WorkHero.tsx), scrubbed to scroll progress —
+   474px (Figma's small state) up to a large state capped by both the
+   viewport width (minus --hero-side-padding) and the available row
+   height, whichever is smaller. Height is never tweened directly: the
+   inline aspect-ratio style (set from the Sanity asset's real
+   dimensions) makes it follow the width automatically, so the source
+   image's proportions are always preserved — no cropping, no distortion. */
+.imageWrapper {
+  position: relative;
+  flex-shrink: 0;
+  width: 474px;
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Gallery items (index 2+ in the filmstrip) share one height — set via
+   a custom property computed in WorkHero.tsx from the hero's own final
+   height — while width is "auto", left for the browser to derive from
+   each image's own aspect-ratio style. That's what lets a portrait,
+   landscape, or square image sit in the same row without cropping or a
+   hardcoded per-image width. Each item's flex-natural position already
+   sits far enough right (behind the still-small/expanding hero image and
+   the viewport's own overflow: hidden) that none of this needs an
+   opacity-based reveal — geometry alone keeps them out of view until
+   WorkHero.tsx's timeline actually brings them on screen. */
+.galleryItem {
+  position: relative;
+  flex-shrink: 0;
+  height: var(--gallery-item-height, 350px);
+  width: auto;
+}
+
+.galleryItem .image {
+  width: auto;
+  height: 100%;
+}
+
+/* Anchored just right of the small/resting hero image's actual (centered)
+   edge — --gallery-initial-offset is set from WorkHero.tsx, the same
+   value used to center the image itself, so this tracks it exactly
+   rather than assuming the image sits flush against the side padding.
+   Intentionally NOT part of the gallery track, so opening it never
+   touches the track's own layout or the ScrollTrigger geometry above.
+   z-index 1 (below .galleryViewport's 2) so the expanding image can
+   cover it, matching .metaBlock/.actionsRow — it also fades out via
+   its own GSAP-driven opacity as the image grows over it. */
+.descriptionAnchor {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--hero-side-padding) + var(--gallery-initial-offset, 0px) + 474px + 24px);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+}
+
+/* Hidden at rest — CSS owns the resting state, GSAP animates the
+   open/close transition (same split as AboutOverlay's slide). */
+.description {
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  opacity: 0;
+  transform: translateX(-16px);
+  pointer-events: none;
+}
+
+.descriptionText {
+  margin: 0;
+  font-family: 'Booton', Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: normal;
+  color: #ffcce0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Bottom-left. z-index 1 (below .galleryViewport's 2), matching
+   .metaBlock/.descriptionAnchor — the expanding hero image is meant to
+   visually grow over this, and it also fades out via GSAP as that
+   happens (see WorkHero.tsx), same as the headline. */
+.actionsRow {
+  position: absolute;
+  left: var(--hero-side-padding);
+  bottom: 40px;
+  z-index: 1;
+}
+
+/* ── Language switch (shared by desktop + mobile) ───────────────────── */
+
+.languageSwitch {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'Booton', Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #ffcce0;
+}
+
+.languageDivider {
+  color: #ffcce0;
+}
+
+.languageOption {
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font: inherit;
+  color: #6f5861;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.languageOption[data-active="true"] {
+  color: #ffcce0;
+  text-decoration: underline;
+}
+
+/* ── Mobile: ≤810px ──────────────────────────────────────────────────
+   No sticky/scroll-scrub, no horizontal gallery — a plain normal-flow
+   stack. The desktop enlargement + filmstrip interaction is intentionally
+   desktop-only (see WorkHero.tsx). */
+
+.mobileStage {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  width: 100%;
+  padding: 80px 16px 16px;
+  box-sizing: border-box;
+}
+
+.mobileTopGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+}
+
+.mobileMetaBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.mobileHeadline {
+  margin: 0;
+  font-family: 'Reckless Standard M-TRIAL', Georgia, serif;
+  font-size: 38px;
+  font-weight: 400;
+  line-height: normal;
+  color: #ffcce0;
+  word-break: break-word;
+  white-space: pre-line;
+}
+
+/* No wrapper/aspect-ratio needed — the <img> carries its own real
+   width/height attributes (from Sanity metadata) plus width: 100%;
+   height: auto so the browser derives the correct ratio natively,
+   reserving the right space even before the image finishes loading. */
+.mobileImage {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.mobileActionsGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  width: 100%;
+}
+
+.mobileDescriptionBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+}
+
+.mobileDescriptionText {
+  margin: 0;
+  font-family: 'Booton', Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: normal;
+  color: #ffcce0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Vertical filmstrip — image, gap, image, gap, image. No wrapper per
+   item: each <img> uses .mobileImage (width: 100%; height: auto) plus
+   its own real width/height attributes, so its natural ratio is
+   preserved without cropping. */
+.mobileGallery {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+}
