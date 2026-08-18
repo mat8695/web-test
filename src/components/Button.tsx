@@ -15,6 +15,8 @@ export interface ButtonProps {
   className?: string;
   style?: CSSProperties;
   variant?: ButtonVariant;
+  "aria-expanded"?: boolean;
+  "aria-controls"?: string;
 }
 
 export default function Button({
@@ -25,6 +27,8 @@ export default function Button({
   className,
   style,
   variant = "default",
+  "aria-expanded": ariaExpanded,
+  "aria-controls": ariaControls,
 }: ButtonProps) {
   const anchorRef = useRef<HTMLAnchorElement>(null);
   const buttonElRef = useRef<HTMLButtonElement>(null);
@@ -114,6 +118,8 @@ export default function Button({
       onClick={onClick}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      aria-expanded={ariaExpanded}
+      aria-controls={ariaControls}
     >
       {inner}
     </a>
@@ -127,6 +133,8 @@ export default function Button({
       onClick={onClick}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      aria-expanded={ariaExpanded}
+      aria-controls={ariaControls}
     >
       {inner}
     </button>

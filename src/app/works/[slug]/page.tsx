@@ -1,7 +1,9 @@
 import { notFound } from "next/navigation";
 import { getProjects, getProjectBySlug } from "@/lib/sanity";
-import { urlFor } from "@/sanity/lib/image";
-import styles from "./page.module.css";
+import Navigation from "@/components/Navigation/Navigation";
+import WorkHero from "@/components/WorkHero/WorkHero";
+import WorkQuote from "@/components/WorkQuote/WorkQuote";
+import Footer from "@/components/Footer/Footer";
 
 export async function generateStaticParams() {
   const projects = await getProjects();
@@ -20,29 +22,12 @@ export default async function WorkPage({
 
   if (!project) notFound();
 
-  const imageUrl = project.coverImage
-    ? urlFor(project.coverImage).width(1200).url()
-    : null;
-
   return (
-    <main className={styles.page}>
-      <header className={styles.header}>
-        <h1 className={styles.title}>{project.title}</h1>
-        {project.year && <p className={styles.meta}>{project.year}</p>}
-        {project.services && project.services.length > 0 && (
-          <ul className={styles.services}>
-            {project.services.map((s) => (
-              <li key={s}>{s}</li>
-            ))}
-          </ul>
-        )}
-      </header>
-
-      {imageUrl && (
-        <div className={styles.coverWrapper}>
-          <img src={imageUrl} alt={project.title} className={styles.cover} />
-        </div>
-      )}
+    <main>
+      <Navigation />
+      <WorkHero project={project} />
+      <WorkQuote project={project} />
+      <Footer />
     </main>
   );
 }

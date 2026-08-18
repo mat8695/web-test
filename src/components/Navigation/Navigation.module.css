@@ -1,0 +1,32 @@
+/* Fixed at the top of the viewport, above ordinary page content but
+   below AboutOverlay (z-index 50) and the page-transition cover
+   (z-index 9999) — so it's still hidden by both, matching how the old
+   in-flow .topBar was already covered whenever AboutOverlay opened. */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 24px 80px;
+  box-sizing: border-box;
+  overflow: hidden;
+  background-color: #1e1e1e;
+  font-family: 'Booton', Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1;
+  color: #f7a9c5;
+  text-align: center;
+}
+
+@media (max-width: 810px) {
+  .nav {
+    padding: 24px;
+    font-size: 14px;
+  }
+}

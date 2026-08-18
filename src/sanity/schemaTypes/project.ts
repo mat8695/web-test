@@ -20,11 +20,13 @@ export const projectType = defineType({
       name: "coverImage",
       title: "Cover Image",
       type: "image",
+      options: { hotspot: true },
     }),
     defineField({
       name: "hoverDescription",
       title: "Hover Description",
-      description: "Short text shown in the dark panel when a visitor hovers the project card.",
+      description:
+        "Short text shown in the dark panel when a visitor hovers the project card (homepage) and as the headline on the project's own case-study page. Press Enter for a forced line break. Non-breaking spaces (Option+Space on Mac, or pasted as &nbsp;) are preserved exactly as typed — use them to keep specific words glued together and control where lines break.",
       type: "text",
       rows: 2,
     }),
@@ -34,10 +36,48 @@ export const projectType = defineType({
       type: "string",
     }),
     defineField({
-      name: "services",
-      title: "Services",
+      name: "descriptionEN",
+      title: "Description (English)",
+      description: "Full case-study description shown on the project page.",
+      type: "text",
+    }),
+    defineField({
+      name: "descriptionPL",
+      title: "Description (Polish)",
+      description: "Full case-study description shown on the project page.",
+      type: "text",
+    }),
+    defineField({
+      name: "gallery",
+      title: "Gallery",
+      description:
+        "Additional case-study images shown after the cover image. Any number of images — 0, 1, or many.",
       type: "array",
-      of: [{ type: "string" }],
+      of: [{ type: "image", options: { hotspot: true } }],
+    }),
+    defineField({
+      name: "quote",
+      title: "Quote",
+      description:
+        "Shown in the full-screen quote section between the gallery and the footer. Leave empty to skip that section entirely. Non-breaking spaces (Option+Space on Mac, or pasted as &nbsp;) are preserved exactly as typed — use them to keep specific words glued together and control where lines break.",
+      type: "text",
+    }),
+    defineField({
+      name: "quoteBackgroundAnimation",
+      title: "Quote Background Animation",
+      description:
+        "Optional background animation for the quote section — same JSON format as the homepage hero's heart animation (a per-cell brightness grid, not a video). Section is 100vh regardless of whether this is set.",
+      type: "object",
+      fields: [
+        defineField({
+          name: "file",
+          title: "Animation File",
+          description:
+            "Recommended resolution: 1920 × 1080 px (16:9). Just upload the file — its own aspect ratio drives how it's rendered, no separate width/height entry needed.",
+          type: "file",
+          options: { accept: "application/json,.json" },
+        }),
+      ],
     }),
   ],
 });

@@ -9,6 +9,7 @@ interface TransitionLinkProps {
   className?: string;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
+  onMouseMove?: (e: MouseEvent<HTMLAnchorElement>) => void;
 }
 
 export function TransitionLink({
@@ -17,6 +18,7 @@ export function TransitionLink({
   className,
   onMouseEnter,
   onMouseLeave,
+  onMouseMove,
 }: TransitionLinkProps) {
   const { navigate } = usePageTransition();
 
@@ -35,6 +37,7 @@ export function TransitionLink({
       onClick={handleClick}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
+      onMouseMove={onMouseMove}
       className={className}
     >
       {children}

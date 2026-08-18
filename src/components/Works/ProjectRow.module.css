@@ -1,0 +1,149 @@
+/* ── Desktop row ─────────────────────────────────────── */
+
+.row {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 24px;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.fill {
+  position: absolute;
+  inset: 0;
+  background-color: #f7a9c5;
+  transform: scaleX(0);
+  transform-origin: left center;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.borderLine {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background-color: #f7a9c5;
+  pointer-events: none;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 48px;
+  width: 100%;
+}
+
+.title {
+  flex: 0 1 356px;
+  min-width: 0;
+  margin: 0;
+  font-family: 'Booton', Arial, Helvetica, sans-serif;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: normal;
+  color: #f7a9c5;
+  word-break: break-word;
+}
+
+.right {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+  align-items: center;
+  gap: 24px;
+}
+
+.description {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  font-family: 'Booton', Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: normal;
+  color: #f7a9c5;
+  white-space: pre-line;
+  word-break: break-word;
+}
+
+.year {
+  flex-shrink: 0;
+  margin: 0;
+  font-family: 'Booton', Arial, Helvetica, sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: normal;
+  color: #f7a9c5;
+  white-space: nowrap;
+}
+
+.arrow {
+  flex-shrink: 0;
+  --arrow-border: #f7a9c5;
+  transform: rotate(-90deg);
+}
+
+/* ── Mobile row ──────────────────────────────────────── */
+
+.mobileRow {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  padding: 16px 8px;
+  box-sizing: border-box;
+  border-bottom: 1px solid #f7a9c5;
+}
+
+.mobileTopRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  white-space: nowrap;
+}
+
+.mobileTitle {
+  margin: 0;
+  font-family: 'Booton', Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: normal;
+  color: #f7a9c5;
+}
+
+.mobileYear {
+  margin: 0;
+  font-family: 'Booton', Arial, Helvetica, sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: normal;
+  color: #f7a9c5;
+}
+
+.mobileBottomRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+}
+
+.mobileDescription {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  font-family: 'Booton', Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: normal;
+  color: #f7a9c5;
+  white-space: pre-line;
+  word-break: break-word;
+}

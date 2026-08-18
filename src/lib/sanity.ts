@@ -12,10 +12,12 @@ const PROJECTS_QUERY = `
   *[_type == "project"] | order(_createdAt asc) {
     title,
     "slug": slug.current,
-    coverImage,
+    coverImage{
+      ...,
+      "metadata": asset->metadata
+    },
     hoverDescription,
-    year,
-    services
+    year
   }
 `;
 
@@ -23,10 +25,22 @@ const PROJECT_BY_SLUG_QUERY = `
   *[_type == "project" && slug.current == $slug][0] {
     title,
     "slug": slug.current,
-    coverImage,
+    coverImage{
+      ...,
+      "metadata": asset->metadata
+    },
     hoverDescription,
     year,
-    services
+    descriptionEN,
+    descriptionPL,
+    gallery[]{
+      ...,
+      "metadata": asset->metadata
+    },
+    quote,
+    quoteBackgroundAnimation{
+      "fileUrl": file.asset->url
+    }
   }
 `;
 
