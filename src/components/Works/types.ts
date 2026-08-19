@@ -23,6 +23,7 @@ export interface SanityProject {
   title: string;
   slug: string;
   coverImage?: SanityImageRef;
+  coverImage2?: SanityImageRef;
   hoverDescription?: string;
   year?: string;
   descriptionEN?: string;

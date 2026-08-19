@@ -102,13 +102,19 @@
    image left of where it should sit. Still clips the horizontal
    filmstrip so gallery images (and the mid-tween hero image) never cause
    real page overflow — only content actually scrolled into view shows. */
+/* pointer-events: none — nothing inside the gallery (images, no click
+   handlers of their own) needs to receive pointer events, and without
+   this its z-index (above .actionsRow/.descriptionAnchor's 1) silently
+   swallows clicks on the read-more button and anywhere else it visually
+   overlaps but has no actual image content. */
 .galleryViewport {
   position: absolute;
   inset: var(--nav-height, 64px) var(--hero-side-padding, 80px) 0 var(--hero-side-padding, 80px);
   z-index: 2;
   display: flex;
   align-items: center;
-  overflow: hidden;
+  overflow: visible;
+  pointer-events: none;
 }
 
 .galleryTrack {

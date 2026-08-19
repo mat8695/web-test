@@ -22,11 +22,21 @@ function ArrowIcon() {
   );
 }
 
+const COVER_CYCLE_INTERVAL = 2000;
+
 export function ProjectCard({ project }: ProjectCardProps) {
   const panelRef = useRef<HTMLDivElement>(null);
+  const image1Ref = useRef<HTMLImageElement>(null);
+  const image2Ref = useRef<HTMLImageElement>(null);
+  const zCounterRef = useRef(1);
+  const cycleIndexRef = useRef(0);
+  const cycleIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const imageUrl = project.coverImage
     ? urlFor(project.coverImage).width(860).url()
+    : null;
+  const image2Url = project.coverImage2
+    ? urlFor(project.coverImage2).width(860).url()
     : null;
 
   // Desktop-only hide/reveal — on mobile there's no hover, so the panel
@@ -38,12 +48,60 @@ export function ProjectCard({ project }: ProjectCardProps) {
     }
   }, []);
 
+  // Only when a second cover image is set — alternates between the two,
+  // every 2s, forever (paused while hovered — see startCycle/stopCycle
+  // below). Same slide-reveal mechanic as the Services section's image
+  // cycling: each slide is permanently mounted and stacked absolutely;
+  // "switching" to one is just re-triggering its own
+  // fromTo(y:100% -> 0%) with a freshly bumped z-index, whether or not
+  // it's the element already sitting on top.
+  const stepCycle = () => {
+    const el1 = image1Ref.current;
+    const el2 = image2Ref.current;
+    if (!el1 || !el2) return;
+    const slides = [el1, el2];
+    cycleIndexRef.current = (cycleIndexRef.current + 1) % slides.length;
+    zCounterRef.current += 1;
+    const el = slides[cycleIndexRef.current];
+    el.style.zIndex = String(zCounterRef.current);
+    gsap.fromTo(el, { y: "100%" }, { y: "0%", duration: 0.8, ease: "power3.out" });
+  };
+
+  const startCycle = () => {
+    if (cycleIntervalRef.current) return;
+    cycleIntervalRef.current = setInterval(stepCycle, COVER_CYCLE_INTERVAL);
+  };
+
+  const stopCycle = () => {
+    if (!cycleIntervalRef.current) return;
+    clearInterval(cycleIntervalRef.current);
+    cycleIntervalRef.current = null;
+  };
+
+  useEffect(() => {
+    if (!image2Url) return;
+    const el1 = image1Ref.current;
+    const el2 = image2Ref.current;
+    if (!el1 || !el2) return;
+
+    gsap.set(el2, { y: "100%", zIndex: 0 });
+    gsap.set(el1, { zIndex: 1 });
+    zCounterRef.current = 1;
+    cycleIndexRef.current = 0;
+
+    startCycle();
+    return () => stopCycle();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [image2Url]);
+
   const handleMouseEnter = () => {
+    if (image2Url) stopCycle();
     if (!window.matchMedia("(min-width: 811px)").matches) return;
     gsap.to(panelRef.current, { yPercent: 0, duration: 0.5, ease: "power3.out" });
   };
 
   const handleMouseLeave = () => {
+    if (image2Url) startCycle();
     if (!window.matchMedia("(min-width: 811px)").matches) return;
     gsap.to(panelRef.current, { yPercent: 100, duration: 0.5, ease: "power3.out" });
   };
@@ -56,7 +114,14 @@ export function ProjectCard({ project }: ProjectCardProps) {
       onMouseLeave={handleMouseLeave}
     >
       {imageUrl ? (
-        <img src={imageUrl} alt={project.title} className={styles.image} />
+        image2Url ? (
+          <div className={styles.imageStage}>
+            <img ref={image1Ref} src={imageUrl} alt={project.title} className={styles.image} />
+            <img ref={image2Ref} src={image2Url} alt="" className={styles.image} aria-hidden="true" />
+          </div>
+        ) : (
+          <img src={imageUrl} alt={project.title} className={styles.image} />
+        )
       ) : (
         <div className={styles.placeholder} />
       )}

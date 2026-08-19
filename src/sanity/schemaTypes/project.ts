@@ -23,6 +23,14 @@ export const projectType = defineType({
       options: { hotspot: true },
     }),
     defineField({
+      name: "coverImage2",
+      title: "Cover Image 2",
+      description:
+        "Optional second cover image. When set, the homepage project card alternates between Cover Image and this one every 2 seconds (same slide animation as the Services section). Leave empty to keep a single static cover image.",
+      type: "image",
+      options: { hotspot: true },
+    }),
+    defineField({
       name: "hoverDescription",
       title: "Hover Description",
       description:
