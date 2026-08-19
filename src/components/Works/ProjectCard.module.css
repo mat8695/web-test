@@ -22,6 +22,29 @@
   user-select: none;
 }
 
+/* Wraps both stacked cover images when a project has a second one (see
+   ProjectCard.tsx). Purely a positioning/event-passthrough container —
+   carries no animation or styling of its own, so it can't interfere with
+   or duplicate .panel's existing hover reveal, and pointer-events: none
+   (on top of .image's own) guarantees neither stacked <img> can ever
+   intercept the hover/click events .card's TransitionLink relies on.
+   z-index: 0 (rather than leaving it auto) is load-bearing, not
+   decorative — it's what makes this element a stacking context in its
+   own right. The two stacked <img>s inside get ever-increasing z-index
+   values as the cycle progresses (1, 2, 3, ...); without this, those
+   values aren't contained by anything and compare directly against
+   .panel's in the shared *outer* context — since z-index:auto (.panel)
+   always paints behind ANY explicit positive z-index sibling regardless
+   of DOM order, the cycling images would eventually paint over the
+   panel. Scoping them inside their own context here means whatever they
+   climb to internally can never be compared against .panel at all. */
+.imageStage {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
 .placeholder {
   position: absolute;
   inset: 0;
@@ -29,13 +52,17 @@
 }
 
 /* Hover panel. Starts translated fully below the card (GSAP sets yPercent: 100
-   on mount) and slides up over the image's bottom portion on hover. */
+   on mount) and slides up over the image's bottom portion on hover.
+   Explicit z-index (paired with .imageStage's own, above) guarantees this
+   always paints above both the single-image and two-image cases, rather
+   than depending on DOM-order tie-breaking among z-index:auto siblings. */
 .panel {
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
   height: 40.36%;
+  z-index: 1;
   box-sizing: border-box;
   padding: 16px;
   display: flex;

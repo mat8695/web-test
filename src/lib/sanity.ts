@@ -16,6 +16,7 @@ const PROJECTS_QUERY = `
       ...,
       "metadata": asset->metadata
     },
+    coverImage2,
     hoverDescription,
     year
   }

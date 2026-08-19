@@ -169,7 +169,6 @@ export default function WorkHero({ project }: WorkHeroProps) {
       const galleryItemEls = Array.from(
         track.querySelectorAll<HTMLElement>(`.${styles.galleryItem}`)
       );
-      const secondImage = galleryItemEls[0] ?? null;
       const lastImage = galleryItemEls[galleryItemEls.length - 1] ?? null;
 
       // Measure the track's TRUE final layout directly — hero temporarily
@@ -195,18 +194,25 @@ export default function WorkHero({ project }: WorkHeroProps) {
       const stageB2Target = needsStageB2 ? viewportWidth / 2 - lastImageCenter : finalCenterOffset;
       const stageB2Distance = needsStageB2 ? Math.abs(finalCenterOffset - stageB2Target) : 0;
 
-      // Image 2 starts a full viewport-width off to the right of its
-      // natural (already-gapped) flex position, capped to a reasonable
-      // scroll budget so very wide viewports don't demand an excessively
-      // long "entrance" scroll.
+      // Every gallery image starts a full viewport-width off to the right
+      // of its natural (already-gapped) flex position, capped to a
+      // reasonable scroll budget so very wide viewports don't demand an
+      // excessively long "entrance" scroll. All of them get this same
+      // explicit offset — not just the first — because a narrow (portrait)
+      // first gallery image shrinks the cumulative width standing between
+      // the hero image and the ones after it; relying on natural flex
+      // position alone to keep those later images off-screen breaks the
+      // moment that cumulative width gets too small to clear the viewport.
       const entryOffset = window.innerWidth;
       const stageADistance = window.innerHeight * 0.5;
-      const stageB1Distance = secondImage ? Math.min(entryOffset, window.innerHeight * 0.6) : 0;
+      const stageB1Distance = galleryItemEls.length
+        ? Math.min(entryOffset, window.innerHeight * 0.6)
+        : 0;
       const totalDistance = stageADistance + stageB1Distance + stageB2Distance;
 
       gsap.set(wrapper, { width: SMALL_IMAGE_WIDTH });
       gsap.set(track, { x: initialOffset });
-      if (secondImage) gsap.set(secondImage, { x: entryOffset });
+      if (galleryItemEls.length) gsap.set(galleryItemEls, { x: entryOffset });
       gsap.set([headlineEl, actionsRow].filter(Boolean) as HTMLElement[], { opacity: 1 });
 
       tl = gsap.timeline({
@@ -237,10 +243,15 @@ export default function WorkHero({ project }: WorkHeroProps) {
         );
       }
 
-      // Stage B1: image 2 slides in from off-screen to its natural
-      // (24px-gapped) position; the track — and so image 1 — stays still.
-      if (secondImage) {
-        tl.to(secondImage, { x: 0, duration: stageB1Distance, ease: "none" }, stageADistance);
+      // Stage B1: all gallery images slide in from off-screen to their
+      // natural (24px-gapped) flex positions together; the track — and so
+      // the hero image — stays still. Images beyond the first are already
+      // off-screen throughout this stage in the common (landscape) case,
+      // so animating them in lockstep with the first is visually
+      // unchanged there — it only matters once one of them is narrow
+      // enough to otherwise be visible early (see the entryOffset note).
+      if (galleryItemEls.length) {
+        tl.to(galleryItemEls, { x: 0, duration: stageB1Distance, ease: "none" }, stageADistance);
       }
 
       // Stage B2: from here on the whole track (image 2 now in its
