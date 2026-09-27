@@ -12,6 +12,10 @@ interface WorksListProps {
   projects: SanityProject[];
 }
 
+// Breathing room between the pointer and the image's top-left corner, so
+// the cursor sits just outside the artwork rather than on top of it.
+const CURSOR_GAP = 8;
+
 function getAspectRatio(image: SanityImageRef | undefined): number | undefined {
   const dims = image?.metadata?.dimensions;
   if (!dims) return undefined;
@@ -39,16 +43,26 @@ export default function WorksList({ projects }: WorksListProps) {
   // the image tracks the pointer with zero lag. (quickTo needs a nonzero
   // duration to work at all; passing 0 leaves it stuck.) Still routed
   // through GSAP rather than raw style writes, so it stays on GSAP's own
-  // rAF-batched update path. Centering (xPercent/yPercent) is set once
-  // here and composes with the x/y sets on every move, rather than living
-  // in a plain CSS transform that these x/y sets would otherwise
-  // overwrite.
+  // rAF-batched update path. xPercent/yPercent are set once here and
+  // compose with the x/y sets on every move, rather than living in a plain
+  // CSS transform that those x/y sets would otherwise overwrite.
+  //
+  // Both are 0 so the image hangs off the cursor's top-left corner (the
+  // cursor sits on its top-left edge) rather than being centred on it.
+  // transformOrigin matches, so the 0.96 -> 1 reveal scales the image away
+  // from that corner instead of drifting it off the pointer.
   useEffect(() => {
     if (isMobile) return;
     const el = floatingRef.current;
     if (!el) return;
 
-    gsap.set(el, { xPercent: -50, yPercent: -50, opacity: 0, scale: 0.96 });
+    gsap.set(el, {
+      xPercent: 0,
+      yPercent: 0,
+      transformOrigin: "0% 0%",
+      opacity: 0,
+      scale: 0.96,
+    });
   }, [isMobile]);
 
   const handleHoverStart = (project: SanityProject) => {
@@ -61,7 +75,10 @@ export default function WorksList({ projects }: WorksListProps) {
     const el = floatingRef.current;
     if (!container || !el) return;
     const rect = container.getBoundingClientRect();
-    gsap.set(el, { x: clientX - rect.left, y: clientY - rect.top });
+    gsap.set(el, {
+      x: clientX - rect.left + CURSOR_GAP,
+      y: clientY - rect.top + CURSOR_GAP,
+    });
   };
 
   const handleHoverEnd = () => {

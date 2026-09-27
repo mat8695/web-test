@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import gsap from "gsap";
+import { TransitionLink } from "@/components/Transition/TransitionLink";
 import { SHARP_EASE } from "@/lib/easing";
 import styles from "./Navigation.module.css";
 
@@ -81,7 +81,7 @@ export default function Navigation() {
 
   return (
     <nav className={styles.nav} ref={navRef} aria-label="katszewczyk">
-      <Link href="/">KAT.SZEWCZYK</Link>
+      <TransitionLink href="/">kat.szewczyk</TransitionLink>
       {!isMobile && (
         <a href="mailto:halo@katszewczyk.com">halo@katszewczyk.com</a>
       )}

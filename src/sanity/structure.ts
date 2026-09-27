@@ -7,6 +7,13 @@ export const structure: StructureResolver = (S) =>
     .items([
       // Singleton: one fixed document, not a creatable list.
       S.listItem()
+        .title('Web Settings')
+        .id('webSettings')
+        .child(
+          S.document().schemaType('webSettings').documentId('webSettings')
+        ),
+      // Singleton: one fixed document, not a creatable list.
+      S.listItem()
         .title('Pre-Brief Questions')
         .id('preBriefSettings')
         .child(
@@ -14,6 +21,6 @@ export const structure: StructureResolver = (S) =>
         ),
       S.divider(),
       ...S.documentTypeListItems().filter(
-        (item) => item.getId() !== 'preBriefSettings'
+        (item) => !['webSettings', 'preBriefSettings'].includes(item.getId() ?? '')
       ),
     ])

@@ -4,14 +4,13 @@ import { useEffect, useId, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Button from "@/components/Button";
+import LanguageSwitch, { type Language } from "@/components/LanguageSwitch/LanguageSwitch";
 import { SHARP_EASE } from "@/lib/easing";
 import { urlFor } from "@/sanity/lib/image";
 import type { SanityProject, SanityImageRef } from "@/components/Works/types";
 import styles from "./WorkHero.module.css";
 
 gsap.registerPlugin(ScrollTrigger);
-
-type Language = "en" | "pl";
 
 // Figma's small (resting) hero-image box on desktop — the scroll tween
 // grows it from here up to a large state, capped by both the hero's own
@@ -30,37 +29,6 @@ function getAspectRatio(image: SanityImageRef | undefined): number | null {
   if (dims.aspectRatio) return dims.aspectRatio;
   if (dims.width && dims.height) return dims.width / dims.height;
   return null;
-}
-
-interface LanguageSwitchProps {
-  language: Language;
-  onChange: (language: Language) => void;
-}
-
-function LanguageSwitch({ language, onChange }: LanguageSwitchProps) {
-  return (
-    <div className={styles.languageSwitch}>
-      <button
-        type="button"
-        className={styles.languageOption}
-        data-active={language === "en"}
-        onClick={() => onChange("en")}
-      >
-        EN
-      </button>
-      <span className={styles.languageDivider} aria-hidden="true">
-        {" | "}
-      </span>
-      <button
-        type="button"
-        className={styles.languageOption}
-        data-active={language === "pl"}
-        onClick={() => onChange("pl")}
-      >
-        PL
-      </button>
-    </div>
-  );
 }
 
 interface WorkHeroProps {

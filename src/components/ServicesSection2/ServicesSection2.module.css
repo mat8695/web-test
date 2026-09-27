@@ -1,0 +1,156 @@
+.section {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 160px 80px 80px;
+  background-color: #1e1e1e;
+}
+
+/* Three explicit rows — heading / toggle / body — so the columns can opt
+   into them as a subgrid below. row-gap stays 0 because the spacing inside
+   a column is handled by its own margins, not the shared grid. */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: auto auto auto;
+  column-gap: 80px;
+  row-gap: 0;
+  width: 100%;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+}
+
+/* The headings are different lengths, so at narrower widths one of them
+   wraps to two lines before the other does — which pushed that column's
+   SEE MORE/arrow down and left the two columns visibly out of step.
+   Sharing the parent's row tracks means the heading row is as tall as the
+   TALLER heading in both columns, so the arrows and the revealed text stay
+   on the same line no matter which heading wraps first. */
+@supports (grid-template-rows: subgrid) {
+  .column {
+    display: grid;
+    grid-template-rows: subgrid;
+    grid-row: span 3;
+    justify-items: start;
+    align-content: start;
+  }
+}
+
+/* Same h1 face/scale as the other section headings across the site
+   (WorkHero .headline, WorksList .heading). pre-line so an editor can press
+   Enter in the CMS title to control where the heading breaks, matching
+   hoverDescription/quote elsewhere. */
+.heading {
+  margin: 0;
+  font-family: 'Reckless Standard M-TRIAL', Georgia, serif;
+  font-size: 48px;
+  font-weight: 400;
+  line-height: normal;
+  color: #f7a9c5;
+  white-space: pre-line;
+  word-break: break-word;
+}
+
+/* The whole label+arrow block is the toggle, so the hover/click target is
+   bigger than the 46px circle itself. */
+.toggle {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 24px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.toggleLabel {
+  font-family: 'Booton', Arial, Helvetica, sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #f7a9c5;
+}
+
+/* Arrow.tsx's rest state is a dark circle for light backgrounds; on this
+   dark section it reads as a pink outline instead, filling pink with a dark
+   glyph once the column is open. */
+.arrow {
+  --arrow-border: #f7a9c5;
+  --arrow-fill: #f7a9c5;
+  --arrow-hover-color: #1e1e1e;
+}
+
+/* Collapsed resting state — GSAP animates height/opacity from here
+   (see ServicesSection2Client.tsx). The inner wrapper carries the spacing
+   so no margin escapes this clipped box and offsets the collapsed state. */
+.body {
+  height: 0;
+  opacity: 0;
+  overflow: hidden;
+  width: 100%;
+  max-width: 460px;
+}
+
+.bodyInner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  padding-top: 24px;
+}
+
+.languageSwitch {
+  flex-shrink: 0;
+}
+
+.description {
+  margin: 0;
+  font-family: 'Booton', Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: #f7a9c5;
+  /* Blank lines typed in the CMS description become paragraph breaks. */
+  white-space: pre-line;
+  word-break: break-word;
+}
+
+@media (max-width: 810px) {
+  .section {
+    min-height: 0;
+    padding: 80px 24px;
+  }
+
+  /* Stacked, so there are no side-by-side columns left to keep in step —
+     back to plain flow with a real gap between the two blocks. */
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 48px;
+  }
+
+  .column {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .heading {
+    font-size: 38px;
+  }
+
+  .body {
+    max-width: none;
+  }
+}

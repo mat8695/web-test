@@ -13,6 +13,8 @@ export interface SanityServiceItem {
 export interface SanityServiceCategory {
   _id: string;
   title: string;
+  descriptionEN?: string;
+  descriptionPL?: string;
   image?: SanityImageRef;
   subcategories?: SanityServiceItem[];
   order?: number;
