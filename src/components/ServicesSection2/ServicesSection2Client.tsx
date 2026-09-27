@@ -108,8 +108,11 @@ export default function ServicesSection2Client({ categories }: ServicesSection2C
 
   if (!categories.length) return null;
 
+  // id="services" is the anchor the Footer's Services link (/#services)
+  // targets — it moved here from the old Services section when this one
+  // replaced it on the homepage.
   return (
-    <section className={styles.section} aria-label="Services">
+    <section id="services" className={styles.section} aria-label="Services">
       <div className={styles.grid}>
         {categories.map((category) => (
           <ServiceColumn
