@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import type { SanityImageSource } from "@sanity/image-url";
 import { client } from "@/sanity/lib/client";
-import { urlFor } from "@/sanity/lib/image";
+import { urlFor, hasImageAsset } from "@/sanity/lib/image";
 
 const fetchOptions =
   process.env.NODE_ENV === "production"
@@ -58,7 +58,14 @@ export function resolveOgImage(
   ownImage: SanityImageSource | undefined,
   fallbackImage: SanityImageSource | undefined
 ): { url: string; width: number; height: number } | undefined {
-  const source = ownImage ?? fallbackImage;
+  // An image field left empty in Studio still serializes as an object with
+  // no asset, so fall through to the global default rather than handing an
+  // unresolvable value to urlFor().
+  const source = hasImageAsset(ownImage)
+    ? ownImage
+    : hasImageAsset(fallbackImage)
+      ? fallbackImage
+      : undefined;
   if (!source) return undefined;
   return { url: urlFor(source).width(1200).height(630).fit("crop").url(), width: 1200, height: 630 };
 }

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { urlFor } from "@/sanity/lib/image";
+import { urlFor, hasImageAsset } from "@/sanity/lib/image";
 import { TransitionLink } from "@/components/Transition/TransitionLink";
 import type { SanityProject } from "./types";
 import styles from "./ProjectCard.module.css";
@@ -32,10 +32,10 @@ export function ProjectCard({ project }: ProjectCardProps) {
   const cycleIndexRef = useRef(0);
   const cycleIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const imageUrl = project.coverImage
+  const imageUrl = project.coverImage && hasImageAsset(project.coverImage)
     ? urlFor(project.coverImage).width(860).url()
     : null;
-  const image2Url = project.coverImage2
+  const image2Url = project.coverImage2 && hasImageAsset(project.coverImage2)
     ? urlFor(project.coverImage2).width(860).url()
     : null;
 

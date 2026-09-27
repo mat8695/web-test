@@ -28,13 +28,19 @@
   --pad-x: 8px;
   --pad-y: 4px;
   --radius: 0px;
+  /* Palette, overridable per instance (e.g. the /brief page sits on the
+     same pink these default to and needs dark-on-pink instead). Defaults
+     are the original hardcoded values. */
+  --button-color: #f7a9c5;
+  --button-fill: #ffcde0;
+  --button-hover-color: #1e1e1e;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   position: relative;
   padding: var(--pad-y) var(--pad-x);
   border-radius: var(--radius);
-  border: 1px solid #f7a9c5;
+  border: 1px solid var(--button-color);
   background: transparent;
   overflow: hidden;
   cursor: pointer;
@@ -60,7 +66,7 @@
 .fill {
   position: absolute;
   inset: 0;
-  background-color: #ffcde0;
+  background-color: var(--button-fill);
   transform: scaleX(0);
   transform-origin: left center;
   z-index: 0;
@@ -70,7 +76,7 @@
 .textDefault {
   position: relative;
   z-index: 1;
-  color: #f7a9c5;
+  color: var(--button-color);
   pointer-events: none;
 }
 
@@ -81,7 +87,7 @@
   align-items: center;
   justify-content: center;
   z-index: 2;
-  color: #1e1e1e;
+  color: var(--button-hover-color);
   font-family: 'Booton', Arial, Helvetica, sans-serif;
   /* Inherits font-size from .button (not hardcoded) so the reveal text
      never jumps to a different size than the resting text on hover —

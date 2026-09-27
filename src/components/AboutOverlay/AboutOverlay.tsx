@@ -4,29 +4,12 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { SHARP_EASE } from "@/lib/easing";
 import Arrow from "@/components/Arrow";
+import HeartLogo from "@/components/HeartLogo/HeartLogo";
 import styles from "./AboutOverlay.module.css";
 
 interface AboutOverlayProps {
   isOpen: boolean;
   onClose: () => void;
-}
-
-function HeartLogo() {
-  return (
-    <svg
-      width="20"
-      height="18"
-      viewBox="0 0 20 18"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-    >
-      <path
-        d="M10 18C10.6536 17.6444 19.6079 12.8793 19.9869 6.50693C20.0523 5.36901 19.9216 3.15005 18.4314 1.48583C17.4902 0.433247 16.3137 0.177214 15.8954 0.0918696C12.7974 -0.548214 10.3007 2.48152 10 2.80867C9.71242 2.48152 7.20261 -0.562439 4.10456 0.0918696C3.68626 0.177214 2.50979 0.433247 1.56861 1.48583C0.0784135 3.13582 -0.0523058 5.36901 0.0130538 6.50693C0.392139 12.8793 9.3464 17.6586 10 18Z"
-        fill="#1e1e1e"
-      />
-    </svg>
-  );
 }
 
 export default function AboutOverlay({ isOpen, onClose }: AboutOverlayProps) {

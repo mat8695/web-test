@@ -2,6 +2,7 @@ import { client } from "@/sanity/lib/client";
 import type { SanityProject } from "@/components/Works/types";
 import type { SanityServiceItem, SanityServiceCategory } from "@/components/Services/types";
 import type { SanityTestimonial } from "@/components/Testimonials/types";
+import type { SanityPreBriefQuestion } from "@/components/Brief/types";
 
 const fetchOptions =
   process.env.NODE_ENV === "production"
@@ -134,6 +135,32 @@ export async function getTestimonials(): Promise<SanityTestimonial[]> {
   try {
     const items = await client.fetch<SanityTestimonial[]>(TESTIMONIALS_QUERY, {}, fetchOptions);
     return items ?? [];
+  } catch {
+    return [];
+  }
+}
+
+const PRE_BRIEF_QUESTIONS_QUERY = `
+  *[_type == "preBriefSettings" && _id == "preBriefSettings"][0].questions[]{
+    "key": key.current,
+    label,
+    fieldType,
+    required,
+    helperText,
+    options
+  }
+`;
+
+export async function getPreBriefQuestions(): Promise<SanityPreBriefQuestion[]> {
+  try {
+    const questions = await client.fetch<SanityPreBriefQuestion[] | null>(
+      PRE_BRIEF_QUESTIONS_QUERY,
+      {},
+      fetchOptions
+    );
+    // Drop anything an editor started but left without a key/label — those
+    // can't be rendered or matched back to an answer.
+    return (questions ?? []).filter((q) => q?.key && q?.label);
   } catch {
     return [];
   }
