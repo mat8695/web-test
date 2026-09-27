@@ -2,11 +2,14 @@
 
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Arrow from "@/components/Arrow";
 import LanguageSwitch, { type Language } from "@/components/LanguageSwitch/LanguageSwitch";
 import { SHARP_EASE } from "@/lib/easing";
 import type { SanityTestimonial } from "@/components/Testimonials/types";
 import styles from "./Testimonials2.module.css";
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface Testimonials2ClientProps {
   testimonials: SanityTestimonial[];
@@ -16,8 +19,56 @@ export default function Testimonials2Client({ testimonials }: Testimonials2Clien
   const [activeIndex, setActiveIndex] = useState(0);
   const [language, setLanguage] = useState<Language>("en");
 
+  const sectionRef = useRef<HTMLElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
   const quoteRef = useRef<HTMLQuoteElement>(null);
+  const authorRef = useRef<HTMLParagraphElement>(null);
   const isFirstRun = useRef(true);
+
+  // Scroll-in reveal, same shape/easing as the original Testimonials
+  // section: the card widens 60% -> 100%, then the quote rises in, then
+  // the client name fades in.
+  //
+  // Not breakpoint-gated, unlike the original — that one is desktop-only
+  // because it swaps to a different DOM (.tabletCard/.mobileCard) below
+  // 1200px. This section keeps one layout at every width, so the reveal
+  // runs everywhere.
+  useEffect(() => {
+    const section = sectionRef.current;
+    const card = cardRef.current;
+    if (!section || !card) return;
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: section,
+        start: "top 90%",
+        toggleActions: "play none none reverse",
+      },
+    });
+
+    tl.fromTo(card, { width: "60%" }, { width: "100%", duration: 0.6, ease: "circ.out" });
+
+    if (quoteRef.current) {
+      tl.fromTo(
+        quoteRef.current,
+        { opacity: 0, y: 40 },
+        { opacity: 1, y: 0, duration: 0.4, ease: "circ.out" }
+      );
+    }
+
+    if (authorRef.current) {
+      tl.fromTo(
+        authorRef.current,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.3, ease: "circ.out" }
+      );
+    }
+
+    return () => {
+      tl.scrollTrigger?.kill();
+      tl.kill();
+    };
+  }, []);
 
   const count = testimonials.length;
   const current = count ? testimonials[activeIndex % count] : undefined;
@@ -54,8 +105,8 @@ export default function Testimonials2Client({ testimonials }: Testimonials2Clien
   if (!count) return null;
 
   return (
-    <section className={styles.section} aria-label="Testimonials">
-      <div className={styles.card}>
+    <section className={styles.section} aria-label="Testimonials" ref={sectionRef}>
+      <div className={styles.card} ref={cardRef}>
         <div className={styles.upper}>
           <div className={styles.headerRow}>
             <h2 className={styles.title}>Love Notes</h2>
@@ -83,7 +134,7 @@ export default function Testimonials2Client({ testimonials }: Testimonials2Clien
             />
           </div>
           <div className={styles.lowerBottom}>
-            <p className={styles.author}>
+            <p className={styles.author} ref={authorRef}>
               {author}
             </p>
             <Arrow
