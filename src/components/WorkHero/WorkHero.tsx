@@ -6,7 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Button from "@/components/Button";
 import LanguageSwitch, { type Language } from "@/components/LanguageSwitch/LanguageSwitch";
 import { SHARP_EASE } from "@/lib/easing";
-import { urlFor } from "@/sanity/lib/image";
+import { urlFor, hasImageAsset } from "@/sanity/lib/image";
 import type { SanityProject, SanityImageRef } from "@/components/Works/types";
 import styles from "./WorkHero.module.css";
 
@@ -65,7 +65,10 @@ export default function WorkHero({ project }: WorkHeroProps) {
     return () => mq.removeEventListener("change", update);
   }, []);
 
-  const gallery = project.gallery ?? [];
+  // Empty gallery slots (added in Studio but never given an image) have no
+  // asset and would throw in urlFor() during prerender — drop them so the
+  // rest of the gallery still renders. Order of the real images is kept.
+  const gallery = (project.gallery ?? []).filter(hasImageAsset);
   const heroAspectRatio = getAspectRatio(project.coverImage);
 
   // Desktop-only: one continuous GSAP-pinned sequence.
@@ -298,10 +301,10 @@ export default function WorkHero({ project }: WorkHeroProps) {
   const headline = project.hoverDescription;
   const description = language === "en" ? project.descriptionEN : project.descriptionPL;
 
-  const desktopImageUrl = project.coverImage
+  const desktopImageUrl = project.coverImage && hasImageAsset(project.coverImage)
     ? urlFor(project.coverImage).width(1920).url()
     : null;
-  const mobileImageUrl = project.coverImage
+  const mobileImageUrl = project.coverImage && hasImageAsset(project.coverImage)
     ? urlFor(project.coverImage).width(900).url()
     : null;
   const heroDims = project.coverImage?.metadata?.dimensions;

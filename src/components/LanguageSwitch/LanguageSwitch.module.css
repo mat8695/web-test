@@ -1,19 +1,23 @@
 /* Moved verbatim from WorkHero.module.css when this was extracted into a
-   shared component — colors are inherited-friendly but default to the same
-   values the /works/[slug] description panel has always used. */
+   shared component. The two colors are exposed as custom properties so an
+   instance on a light background (e.g. the pink Testimonials card) can
+   invert them via its own className — the defaults are exactly the values
+   the /works/[slug] description panel has always used. */
 
 .languageSwitch {
+  --language-color: #ffcce0;
+  --language-inactive-color: #6f5861;
   display: flex;
   align-items: center;
   gap: 4px;
   font-family: 'Booton', Arial, Helvetica, sans-serif;
   font-size: 14px;
   font-weight: 500;
-  color: #ffcce0;
+  color: var(--language-color);
 }
 
 .languageDivider {
-  color: #ffcce0;
+  color: var(--language-color);
 }
 
 .languageOption {
@@ -22,12 +26,12 @@
   background: none;
   cursor: pointer;
   font: inherit;
-  color: #6f5861;
+  color: var(--language-inactive-color);
   appearance: none;
   -webkit-appearance: none;
 }
 
 .languageOption[data-active="true"] {
-  color: #ffcce0;
+  color: var(--language-color);
   text-decoration: underline;
 }

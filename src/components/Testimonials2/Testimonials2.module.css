@@ -1,0 +1,182 @@
+/* Figma desktop: section p-80, card p-48, title 60px, quote 30px.
+   Figma tablet/mobile: section p-16, card p-16, title 30px, quote 24px.
+   Everything else (structure, 2px rule, 124px bottom block, 58px arrows)
+   is identical across both frames. */
+
+.section {
+  width: 100%;
+  min-height: 100vh;
+  padding: 80px;
+  box-sizing: border-box;
+  background-color: #1e1e1e;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.card {
+  display: flex;
+  flex: 1 0 0;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 1920px;
+  padding: 48px;
+  box-sizing: border-box;
+  background-color: #ffcce0;
+  overflow: hidden;
+}
+
+/* flex: 1 + space-between is what holds the title at the top of the card
+   and drops the quote down to sit just above the rule, matching the large
+   gap in the reference rather than letting them bunch together. */
+.upper {
+  display: flex;
+  flex: 1 0 0;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 0;
+  padding-bottom: 24px;
+  width: 100%;
+}
+
+.headerRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  width: 100%;
+}
+
+.title {
+  margin: 0;
+  font-family: 'Booton', Arial, Helvetica, sans-serif;
+  font-size: 60px;
+  font-weight: 500;
+  line-height: normal;
+  color: #1e1e1e;
+  white-space: nowrap;
+}
+
+/* Dark on the pink card — inverts LanguageSwitch's default light-on-dark
+   palette. Active vs inactive is carried by the underline alone, as in the
+   reference, so both share one color. */
+.languageSwitch {
+  --language-color: #1e1e1e;
+  --language-inactive-color: #1e1e1e;
+  flex-shrink: 0;
+}
+
+.quote {
+  margin: 0;
+  max-width: 997px;
+}
+
+.quote p {
+  margin: 0;
+  font-family: 'Booton', Arial, Helvetica, sans-serif;
+  font-size: 30px;
+  font-weight: 500;
+  line-height: normal;
+  color: #1e1e1e;
+  word-break: break-word;
+}
+
+.divider {
+  flex-shrink: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #1e1e1e;
+}
+
+.lower {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-shrink: 0;
+  height: 124px;
+  padding-top: 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.lowerTop {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.lowerBottom {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  width: 100%;
+}
+
+.author {
+  margin: 0;
+  font-family: 'Booton', Arial, Helvetica, sans-serif;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: normal;
+  color: #1e1e1e;
+  word-break: break-word;
+}
+
+/* Arrow.tsx's glyph points down at rest; the reference has prev pointing
+   left and next pointing right. Its default dark-on-light palette already
+   matches the pink card, so no color overrides are needed. */
+.arrowPrev {
+  transform: rotate(90deg);
+}
+
+.arrowNext {
+  transform: rotate(-90deg);
+}
+
+/* ── Tablet & mobile (Figma "Testimonials tablet") ──────────────────── */
+
+@media (max-width: 1200px) {
+  /* The Figma tablet frame is 860x620, so the section stops at 620px tall
+     here instead of filling the viewport like the desktop frame does. */
+  .section {
+    min-height: 0;
+    height: 620px;
+    padding: 16px;
+  }
+
+  .card {
+    padding: 16px;
+  }
+
+  .title {
+    font-size: 30px;
+  }
+
+  .quote {
+    max-width: 756px;
+  }
+
+  .quote p {
+    font-size: 24px;
+  }
+}
+
+/* Phone widths: the 620px cap is shared with tablet, but a narrow column
+   makes the longest Polish quote wrap far enough to run into the rule at
+   18px — 16px keeps every testimonial clear of it in both languages. */
+@media (max-width: 810px) {
+  .quote {
+    max-width: none;
+  }
+
+  .quote p {
+    font-size: 16px;
+  }
+
+  .author {
+    font-size: 18px;
+  }
+}

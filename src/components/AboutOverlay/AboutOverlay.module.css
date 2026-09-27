@@ -31,6 +31,12 @@
   display: none;
 }
 
+/* HeartLogo now fills with currentColor (it's shared with /brief), so keep
+   the dark value it was hardcoded to here. */
+.logo {
+  color: #1e1e1e;
+}
+
 /* ── Scrollable text ───────────────────────────────── */
 
 .scrollArea {

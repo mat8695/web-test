@@ -1,0 +1,219 @@
+/* Figma "Pre brief" (807:1510): pink page, p-80, column gap-80.
+   Header 48px serif + 16px sub, heart top-right. Form max-width 800px,
+   gap-48; name/email share a 600px-wide two-up row; every control is a
+   bottom-ruled line input. */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+  align-items: flex-start;
+  width: 100%;
+  min-height: 100vh;
+  padding: 80px;
+  box-sizing: border-box;
+  background-color: #ffcce0;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  width: 100%;
+}
+
+.headerText {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  font-family: 'Reckless Standard M-TRIAL', Georgia, serif;
+  font-size: 48px;
+  font-weight: 400;
+  line-height: normal;
+  color: #000;
+  word-break: break-word;
+}
+
+.intro {
+  margin: 0;
+  font-family: 'Booton', Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: normal;
+  color: #000;
+  white-space: pre-line;
+  word-break: break-word;
+}
+
+.heart {
+  flex-shrink: 0;
+  color: #000;
+}
+
+/* ── Form ───────────────────────────────────────────── */
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 800px;
+}
+
+.contactRow {
+  display: flex;
+  gap: 24px;
+  width: 100%;
+  max-width: 600px;
+}
+
+.contactRow .field {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.label {
+  font-family: 'Booton', Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: normal;
+  color: #000;
+  word-break: break-word;
+}
+
+/* Line input: transparent box, single black rule underneath. */
+.input {
+  width: 100%;
+  padding: 8px 0;
+  border: none;
+  border-bottom: 1px solid #000;
+  border-radius: 0;
+  background: transparent;
+  box-sizing: border-box;
+  font-family: 'Booton', Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: normal;
+  color: #1e1e1e;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.input::placeholder {
+  color: #1e1e1e;
+  opacity: 1;
+}
+
+.input:focus {
+  outline: none;
+  border-bottom-width: 2px;
+  /* Keep the control from shifting 1px when the rule thickens. */
+  margin-bottom: -1px;
+}
+
+.input:disabled {
+  opacity: 0.6;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 44px;
+}
+
+/* Single/multi select — the design only specifies line inputs, so these
+   follow the same type scale and sit in the same slot. */
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  padding: 8px 0;
+  border-bottom: 1px solid #000;
+}
+
+.option {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Booton', Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: #1e1e1e;
+  cursor: pointer;
+}
+
+.option input {
+  accent-color: #1e1e1e;
+  cursor: pointer;
+}
+
+/* The page background is the same pink Button's default palette is tuned
+   for, so invert it: dark border/text at rest, filling dark with pink text
+   on hover. Matches the bordered dark button in the design. */
+.submitButton {
+  --button-color: #1e1e1e;
+  --button-fill: #1e1e1e;
+  --button-hover-color: #ffcce0;
+}
+
+.submitRow {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.status {
+  margin: 0;
+  font-family: 'Booton', Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: normal;
+  color: #1e1e1e;
+}
+
+.empty {
+  margin: 0;
+  font-family: 'Booton', Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: #1e1e1e;
+}
+
+/* ── Tablet & mobile ────────────────────────────────── */
+
+@media (max-width: 810px) {
+  .page {
+    gap: 48px;
+    padding: 80px 24px 48px;
+  }
+
+  .title {
+    font-size: 38px;
+  }
+
+  .form {
+    gap: 32px;
+  }
+
+  /* The two-up name/email row would leave each field far too narrow on a
+     phone — stack them like every other question. */
+  .contactRow {
+    flex-direction: column;
+    gap: 32px;
+    max-width: none;
+  }
+}

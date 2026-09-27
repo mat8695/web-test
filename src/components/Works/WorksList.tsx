@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
-import { urlFor } from "@/sanity/lib/image";
+import { urlFor, hasImageAsset } from "@/sanity/lib/image";
 import { SHARP_EASE } from "@/lib/easing";
 import { ProjectRow, MobileProjectRow } from "./ProjectRow";
 import type { SanityImageRef, SanityProject } from "./types";
@@ -85,7 +85,7 @@ export default function WorksList({ projects }: WorksListProps) {
     gsap.to(floatingRef.current, { opacity: 0, scale: 0.96, duration: 0.3, ease: SHARP_EASE });
   };
 
-  const activeImageUrl = activeProject?.coverImage
+  const activeImageUrl = activeProject?.coverImage && hasImageAsset(activeProject.coverImage)
     ? urlFor(activeProject.coverImage).width(900).url()
     : null;
   const activeAspectRatio = getAspectRatio(activeProject?.coverImage);
