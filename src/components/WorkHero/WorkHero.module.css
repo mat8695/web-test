@@ -220,38 +220,6 @@
   z-index: 1;
 }
 
-/* ── Language switch (shared by desktop + mobile) ───────────────────── */
-
-.languageSwitch {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-family: 'Booton', Arial, Helvetica, sans-serif;
-  font-size: 14px;
-  font-weight: 500;
-  color: #ffcce0;
-}
-
-.languageDivider {
-  color: #ffcce0;
-}
-
-.languageOption {
-  padding: 0;
-  border: none;
-  background: none;
-  cursor: pointer;
-  font: inherit;
-  color: #6f5861;
-  appearance: none;
-  -webkit-appearance: none;
-}
-
-.languageOption[data-active="true"] {
-  color: #ffcce0;
-  text-decoration: underline;
-}
-
 /* ── Mobile: ≤810px ──────────────────────────────────────────────────
    No sticky/scroll-scrub, no horizontal gallery — a plain normal-flow
    stack. The desktop enlargement + filmstrip interaction is intentionally

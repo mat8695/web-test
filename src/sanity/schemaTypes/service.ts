@@ -17,9 +17,20 @@ export const serviceType = defineType({
       options: { source: "title" },
     }),
     defineField({
-      name: "description",
-      title: "Description",
+      name: "descriptionEN",
+      title: "Description (English)",
+      description:
+        "Shown in the services section when the visitor picks EN. Press Enter twice for a paragraph break.",
       type: "text",
+      rows: 6,
+    }),
+    defineField({
+      name: "descriptionPL",
+      title: "Description (Polish)",
+      description:
+        "Shown in the services section when the visitor picks PL. Press Enter twice for a paragraph break.",
+      type: "text",
+      rows: 6,
     }),
     defineField({
       name: "image",

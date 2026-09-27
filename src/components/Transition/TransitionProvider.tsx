@@ -38,6 +38,14 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
   // straight back through the covering position and flashing pink across
   // the screen for no reason.
   const isBackForwardNav = useRef(false);
+  // Whether the panel is actually covering the page right now, and so has
+  // something to reveal. True on first mount (the panel's inline transform
+  // starts at 0%) and set again by navigate() once its cover step finishes.
+  // Any pathname change that did NOT go through navigate() leaves the panel
+  // parked below the viewport — revealing from there would drag it up
+  // across a page that has already rendered, which reads as the transition
+  // firing too late.
+  const isCovering = useRef(true);
   const router = useRouter();
   const pathname = usePathname();
 
@@ -69,6 +77,15 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
       return;
     }
 
+    // Nothing covering the page means nothing to reveal — park the panel
+    // rather than sweeping it up over the already-rendered route.
+    if (!isCovering.current) {
+      gsap.set(panel, { y: "100%" });
+      isAnimating.current = false;
+      return;
+    }
+
+    isCovering.current = false;
     isAnimating.current = true;
     gsap.to(panel, {
       y: "-100%",
@@ -84,6 +101,13 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
   const navigate = useCallback(
     (href: string) => {
       if (isAnimating.current) return;
+
+      // Navigating to the route we're already on would never change
+      // `pathname`, so the reveal effect below would never fire and the
+      // cover would sit on screen forever, blocking the page. Bail out
+      // before animating anything — matches what a plain link does.
+      if (href.split(/[?#]/)[0] === pathname) return;
+
       const panel = panelRef.current;
 
       if (!panel) {
@@ -103,9 +127,12 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
 
       // Navigate once fully covered. isAnimating stays true until the
       // reveal onComplete resets it after the new page is shown.
-      tl.call(() => { router.push(href); });
+      tl.call(() => {
+        isCovering.current = true;
+        router.push(href);
+      });
     },
-    [router],
+    [router, pathname],
   );
 
   return (

@@ -90,6 +90,8 @@ const SERVICE_CATEGORIES_QUERY = `
   *[_type == "service"] | order(order asc) {
     _id,
     title,
+    descriptionEN,
+    descriptionPL,
     image,
     order,
     "subcategories": *[
